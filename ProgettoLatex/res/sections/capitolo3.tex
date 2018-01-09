@@ -1,0 +1,122 @@
+\chapter{Ereditarietà}
+
+Una classe può avere solo una superclasse. Una derivata è indicata da \texttt{Class C extends nomeClasseBase{}}. 
+
+\section{Tipo Object}
+Object è la classe base implicita di ogni classe (non serve l'extends). Le classi ereditano i suoi metodi, tipo:
+\begin{itemize}
+\item \texttt{boolean equals(Object obj)} che verifica se due riferimenti puntano allo stesso oggetto; un riferimento è l'oggetto di invocazione, l'altro è parametro passato. 
+\item \texttt{String toString()} ritorna l'oggetto di invocazione in formato stringa; la versione di default restituisce il nome della classe e l'indirizzo del riferimento (quindi meglio ridefinirlo per classe).
+\item \texttt{void finalize()} è una sorta di “distruttore” invocato dal garbage collector su un oggetto senza riferimenti.
+\end{itemize}
+
+\section{Ereditarietà e contratti}
+Una classe ha tre contratti:
+\begin{itemize}
+\item pubblico, per gli utenti della classe, che definisce le funzionalità primarie del tipo
+\item protetto, per chi estende e specializza la classe, che definisce funzionalità disponibili ai sottotipi
+\item package, che definisce funzionalità fornite all'intero pacchetto e permette la cooperazione tra tipi dello stesso pacchetto.
+\end{itemize}
+
+Controllo degli accessi a campi e metodi:
+\begin{table}[h]
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Modificatore & Stessa classe & Stesso package & Sottoclasse & Universo \\
+\hline
+public & Si & Si & Si & Si \\
+\hline
+protected & Si & Si & Si & No \\
+\hline
+nessuno (package) & Si & Si & No & No \\
+\hline
+private & Si & No & No & No \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Costruttori nelle sottoclassi}
+Le derivate ereditano i campi della superclasse, ma non possono inizializzarli. Nei costruttori devono richiamare il costruttore della base tramite la keyword super().
+Comportamento del costruttore di una derivata:
+\begin{itemize}
+\item viene allocata la memoria per tutti i campi, sia propri che ereditati
+\item tutti i campi vengono inizializzati a zero
+\item viene richiamato il costruttore della superclasse diretta; è un passo ricorsivo e si risale fino a Object
+\item vengono eseguite le inizializzazioni esplicite dei campi di D
+\item corpo del costruttore
+\end{itemize}
+
+Se super non è invocato, il compilatore inserisce una chiamata implicita al costruttore di default della base con super(); se quello di default non è disponibile, da errore.
+
+
+\section{Polimorfismo}
+
+Principio di sostituzione: sia T1 sottotipo di T2, un oggetto di tipo T1 può essere usato in ogni contesto al posto di un oggetto di tipo T2.
+Relazione di sottotipo: T1<=T2 se:
+\begin{itemize}
+\item T1 è definito come class T1 extends T2 (derivata)
+\item T1 e T2 sono tipi array, T1=A[], T2=B[] e A<=B
+\item T2 è Object
+\end{itemize}
+
+Tipo statico di un riferimento TS(ref) è il tipo con cui è stato dichiarato; tipo dinamico del riferimento TD(ref) è il tipo effettivo dell'oggetto a cui si riferisce. Vale sempre TD < TS.
+
+In java non c'è distinzione tra ridefinizione e overriding. Tutti i metodi sono implicitamente virtuali se presenti in più classi. Ma un metodo ridefinito:
+\begin{itemize}
+\item deve avere la stessa segnatura (nome, numero e tipo di argomenti, tipo di ritorno uguale o più piccolo)
+\item non può diventare meno accessibile del metodo originale
+\item non può sollevare più eccezioni del metodo originale
+\end{itemize}
+Binding (o dispatching): staticamente il compilatore controlla se esiste una definizione del metodo usato, dinamicamente viene scelta la ridefinizione più specifica rispetto al tipo dinamico (quindi con meno conversioni).
+Per i metodi statici e i campi dati il dispatching è sempre statico. Anche per i metodi privati (perché non possono essere ridefiniti) e quando viene invocato un metodo della superclasse con la keyword super. Super in modo simile al this si riferisce all'oggetto corrente ma con il tipo della superclasse. Quindi un super.m() invoca sempre il metodo della superclasse.
+L'overloading dei metodi non nasconde tutti i metodi della base, ma solo quelli con la stessa segnatura e tipo di ritorno.
+
+\section{Conversioni di tipo}
+Le conversioni sono possibili solo se un tipo è minore dell'altro. Se quello di partenza è più piccolo si chiama upcast, viceversa downcast.
+L'upcasting è sempre sicuro perché rispecchia il principio di sostituzione.
+Il downcasting si usa quando si ha la necessità di usare metodi specifici del tipo dinamico %(il dynamic_cast di C++); viene fatto esplicitamente con (tipoTarget)nomeVariabile. Questa operazione ritorna un riferimento con lo stesso valore ma tipo statico diverso, ma il riferimento originale ha ancora lo stesso tipo statico.
+T1 ref=new T2();
+T2 nuovoRef=(T1)ref;
+// TS(ref)=T1, TS(nuovoRef)=T2, TD(entrambi)=T2.
+
+La conversione T(ref):
+\begin{itemize}
+\item  staticamente compila se TS(ref) e T sono nella stessa gerarchia
+\item  dinamicamente è corretta se TD(ref)<=T, altrimenti eccezione ClassCastException
+\end{itemize}
+
+\section{Identificazione dei tipi run-time}
+Esiste l'operatore booleano ref instanceof T che permette di vedere se è possibile effettuare il downcasting; ritorna true se ref è non nullo e TD(ref)<=T.
+
+\section{Keyword Final}
+Final viene usato per indicare qualcosa di costante. Il riferimento this è implicitamente final.
+NB: non esistono oggetti costanti.
+Un campo dati marcato final è costante: non si può modificare il valore. Deve essere inizializzato esplicitamente, altrimenti è errore, anche se è inizializzato a zero!
+Un riferimento marcato final si riferisce solo ad uno oggetto fisso, ma l'oggetto può essere modificato.
+Gli argomenti di un metodo possono essere marcati final: non si può modificare l'argomento; se è un riferimento, si può solo modificare l'oggetto.
+Un metodo marcato final non può essere ridefinito nelle sottoclassi (usato per motivi di sicurezza o efficienza).
+Una classe marcata final non può avere derivate.
+
+\section{Suggerimenti per la progettazione di classi}
+\begin{itemize}
+\item progettare al meglio i contratti della classe (public, protected, package)
+\item i campi dati è meglio che siano privati, se possibile
+\item inizializzare i dati esplicitamente, non fidandosi dell'inizializzazione automatica
+\item raggruppare i campi
+\item una singola classe non dovrebbe svolgere troppi compiti
+\item usare identificatori significativi
+\end{itemize}
+
+\section{Suggerimenti per la progettazione di gerarchie}
+\begin{itemize}
+\item le operazioni comuni vanno in una superclasse
+\item evitare i campi protected
+\item usare l'ereditarietà solo quando un oggetto del sottotipo è intuitivamente anche oggetto del supertipo
+\item usare l'ereditarietà solo se tutti i metodi hanno senso nelle classi che li ereditano
+\item l'overriding di un metodo non deve modificarne il contratto
+\item limitare il downcast
+\end{itemize}
+
+\section{Classi wrapper}
+Sono classi che racchiudono tipi primitivi per poterli trattare come oggetti. Es: Integer -> int
+

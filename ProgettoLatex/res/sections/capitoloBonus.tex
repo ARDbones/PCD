@@ -1,0 +1,63 @@
+\chapter{Generics e Collezioni}
+
+\section{Generics}
+In Java sono presenti i template di funzione e di classe, e si chiamano funzioni/classi generiche. La definizione utilizza un tipo parametrico T che deve essere specificato quando si vuole usare un istanza di quel template di classe/interfaccia, mentre per i metodi viene dedotto dal compilatore. Il tipo T non può essere un primitivo, vengono accettati solo tipi classe e interfaccia.
+Per definire un generic si usano le parentesi angolari:
+\begin{verbatim}
+public class Classe<T,Z> { }
+public interface Interfaccia<T> { }
+public <T> void f(T[] array) { }
+\end{verbatim}
+
+Un metodo statico che utilizza un tipo parametrico deve essere un metodo generico o si ha un errore di compilazione. 
+\begin{verbatim}
+public class Classe<T>{
+	public static <T> void m(T[] arg) { }
+}
+\end{verbatim}
+
+\subsection*{Vincoli sui tipi delle variabili e Wildcards} % SUBSECTION?
+È possibile porre dei vincoli sui tipi accettabili dal template per evitare errori logici (String in un template che confronta numeri). I vincoli sono espressi all'interno delle parentesi angolari indicando quali classi estende:
+
+\begin{verbatim}
+public static <T extends C> min(T[] arg) { } // dove C è la classe/interfaccia base
+\end{verbatim}
+
+Se si vuole che estenda più classi si usa %\texttt{<T extends A & ... & C>}. Nell'elenco devono andare prima le classi, poi le interfacce.
+
+Un altro modo per porre dei vincoli e l'utilizzo di wildcards, cioè dei caratteri jolly che hanno un significato implicito.
+
+\begin{table}
+\begin{tabular}{|c|c|c|}
+\hline
+Nome & Sintassi & Significato \\
+\hline
+upper bounded & ? extends B & qualsiasi sottotipo di B \\
+\hline
+lower bounded & ? super B & qualsiasi supertipo di B \\
+\hline
+unbounded & ? & qualsiasi tipo \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection*{Generics e Ereditarietà}
+Se un tipo è l'estensione di un altro, non comporta che lo siano anche le classi generiche istanziate. 
+\begin{verbatim}
+class Dirigente extends Dipendente {...}
+class Agente extends Dipendente {...}
+ArrayList<Dirigente> a = new ArrayList<Dirigente>();
+ArrayList<Dipendente> b = a; // NON FUNZIONA
+Dipendente dip = new Agente();
+b.add(dip); 
+\end{verbatim}
+
+\subsection*{}
+A causa del \textit{type erasure} di Java non è possibile:
+\begin{itemize}
+\item costruire oggetti che sono istanze del tipo parametro
+\item usare il tipo di una classe generica per definire campi dati statici, metodi statici o classi
+\end{itemize}
+
+\section{Collezioni}
+Le collezioni in Java corrispondono ai contenitori, dove un oggetto rappresenta un insieme di di oggetti.

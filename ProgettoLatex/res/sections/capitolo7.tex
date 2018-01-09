@@ -1,0 +1,90 @@
+\chapter{Programmazione Concorrente}
+
+\section{Processi e Thread}
+Ci sono due tipi di multitasking: 
+\begin{itemize}
+\item cooperativo, in cui i programmi in esecuzione vengono interrotti solo quando sono disposti a cedere la CPU;
+\item preemptive, dove il sistema operativo interrompe i processi senza consultarli, garantendo l'esecuzione a tutti (preferibile, ma più complessa da gestire).
+\end{itemize}
+
+Processo: programma in esecuzione, rappresentato dal proprio codice + proprio program counter + proprio spazio di indirizzamento.
+Thread: singolo flusso di controllo all'interno di un processo. Un processo può avere più thread. 
+Un programma è multithreaded quando consiste di più thread concorrenti.
+
+\section{Creare Thread in Java}
+Anche i thread sono oggetti della classe Thread. Ci sono due modi per creare un thread: estendere Thread o implementare Runnable.
+
+\begin{framed}
+\begin{verbatim}
+
+class C extends Thread{
+    public void run(){ ..codice thread.. } // override
+}
+
+C c=new C();
+c.start(); // solo con questa invocazione 
+	viene effettivamente attivato il thread dalla JVM
+	
+class C implements Runnable{
+    public void run(){ ..codice thread.. } // override
+}
+
+C c=new C();
+Thread t=new Thread(c);
+t.start(); // solo con questa invocazione
+				viene attivato il thread 
+
+\end{verbatim}
+\end{framed}
+
+Differenze tra i due: oggetto Thread rappresenta il meccanismo che esegue l'attività logica del thread, oggetto Runnable rappresenta l'attività logica in sé.
+Implementare Runnable è utile a causa del vincolo di ereditarietà singola, mentre estendere Thread è utile quando si usano altri metodi di Thread.
+Thread permette di usare direttamente this per riferirsi al thread, mentre Runnable necessita il metodo statico \texttt{currentThread()}. \\
+I thread possono essere dichiarati senza riferimento se usati direttamente come oggetto di invocazione. Questi oggetti non sono preda del garbage collector, perché esiste sempre un riferimento implicito ad oggetti di tipo Thread. \\
+Thread possiede un costruttore ad un parametro di tipo stringa che permette di dare un nome ad un thread. \\
+NB: anche il main ha un suo thread logico, detto main thread. La terminazione del main thread non implica la terminazione dell'esecuzione del programma, che continua finché ci sono thread attivi.
+
+
+\section{Ciclo di vita di un Thread}
+All'interno del ciclo di vita di un thread è possibile distinguere 4 stati:
+\begin{itemize}
+\item \textbf{new}, in cui il thread viene creato con l'istanziazione dell'oggetto
+\item \textbf{runnable}, quando il thread è virtualmente in esecuzione
+\item \textbf{not runnable}, quando il thread è bloccato in attesa di qualcosa (I/O, sleep, lock, ecc)
+\item \textbf{terminated}, quando il thread termina l'esecuzione con l'uscita dal metodo run
+\end{itemize}
+
+Il metodo \texttt{sleep(int millisecondi)} mette un thread in stato not runnable per un tempo indicato in millisecondi.
+
+Le eccezioni nel metodo run se sono \textit{controllate} vanno gestite all'interno del metodo, mentre se è \textit{non controllata} possono esserci dei problemi: se non viene gestita, viene sollevata l'eccezione, interrotto il thread, ma l'esecuzione degli altri thread prosegue, quindi potrebbe venire ignorata. Si può installare nel thread un gestore delle eccezioni \textit{non controllate} di tipo \texttt{Thread.UncaughtExceptionHandler}, passandolo al metodo \texttt{setUncaughtExceptionHandler}.
+
+\section{Correttezza di un programma concorrente}
+La correttezza in un programma concorrente non è facile da assicurare. Deve essere corretto l'output, si deve garantire che tutti i thread abbiano la possibilità di essere eseguiti e assicurare che il programma non deteriori le prestazioni impegnando inutilmente la CPU.
+La gestione dell'ordine di esecuzione dei thread dipende dal sistema operativo. È possibile influenzare lo scheduling tramite la priorità dei thread e il metodo yield().
+Un thread ottiene la stessa priorità del thread che l'ha creato, ma setPriority() permette di assegnare una diversa priorità. Se due thread sono nello stato runnable, viene eseguito quello con priorità maggiore.
+Il metodo statico yield() fa abbandonare la CPU dal thread che la sta utilizzando per permettere ad altri thread con la stessa priorità di usarla.
+Non è assicurato che il SO segua questi parametri; non bisogna basare la correttezza di un programma sulle priorità o su \texttt{yield}, ma usare piuttosto \texttt{sleep} o \texttt{wait}.
+
+\section{Terminazione di un thread}
+Il metodo \texttt{join()}  permette di far attendere un thread la terminazione di un altro thread. (?)
+Il metodo \texttt{interrupt()} permette di interrompere un thread, assegnandogli lo stato di interruzione tramite un flag booleano. Tramite \texttt{Thread.currentThread().isInterrupted()} è possibile sapere il valore del flag e decidere come reagire all'interruzione, se concludere il run() o ignorare la richiesta. Se il thread era nello stato not runnable, genera l'eccezione \texttt{InterruptedException}.
+Ci sono dei thread che lavorano in background, detti demoni. Questi hanno un metodo run con un loop infinito che attende richieste da altri thread. È possibile creare un thread demone con \texttt{t.setDaemon(true)} prima dello start(). I thread demoni non mantengono attivo il programma: se sono rimasti solo demoni il programma viene terminato.
+
+\section{Il problema della condivisione dei dati}
+Due thread concorrenti possono accedere agli stessi dati; c'è bisogno di gestire gli accessi per non danneggiare i dati condivisi. Per ogni oggetto condiviso, vanno individuate le sezioni critiche e sincronizzate le entrate dei thread in queste sezioni in modo che in ogni istante un solo thread sta eseguendo le istruzioni della propria sezione critica.
+Un metodo è quello dei lock, che indicano che l'oggetto sta venendo usato nella sezione critica.
+Le sezioni critiche vanno racchiuse nei blocchi synchronized ( exp ) { … }, dove exp è l'oggetto per cui il codice nel blocco è una sezione critica.
+Un thread che arriva al blocco richiede il lock:
+\begin{itemize}
+\item se lo ottiene, blocca l'accesso finchè non termina il codice, poi rilascia il lock; viene rilasciato anche se interrotto da un'eccezione
+\item se non lo ottiene, viene sospeso e messo in coda finchè non si libera
+\end{itemize}
+Se un thread viene interrotto e perde la CPU, mantiene il lock finchè non termina l'esecuzione, bloccando tutti i thread che vorrebbero accedere al blocco synchronized dell'oggetto.
+
+Se un intero metodo rappresenta una sezione critica, si può usare synchronized nella dichiarazione del metodo, ma il marcatore non fa parte della segnatura e non viene ereditato. Le richieste di sincronizzazione fanno parte dell'implementazione, non dell'interfaccia di una classe, quindi una interfaccia non può avere metodi synchronized.
+
+I lock di Java sono rientranti, cioè un thread può acquisire i rilasciare più volte il lock su uno stesso oggetto.
+
+\section{Thread e Task}
+Come già detto, c'è una differenza tra l'attività logica da eseguire concorrentemente (Task) e il meccanismo che esegue l'attività concorrentemente (Thread). Di solito, prima di suddivide il lavoro in task, poi si pensa alla loro politica di esecuzione. \\
+Creare un nuovo thread può essere costoso, oltre ad essere difficile da gestire bene. 
