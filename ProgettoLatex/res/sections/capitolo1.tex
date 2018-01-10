@@ -1,18 +1,18 @@
 \chapter{Struttura dei programmi Java}
 
 \section{Java e il Main}
-Il linguaggio Java è orientato completamente agli oggetti, quindi non ci sono funzioni, solo metodi di classe. Anche il main è un metodo di classe, statico (non ha oggetto di invocazione), pubblico (accessibile da chiunque), con argomento di tipo String[ ] e senza valore di ritorno (void).
+Il linguaggio Java è orientato completamente agli oggetti, quindi non ci sono funzioni, solo metodi di classe. Anche il \texttt{main} è un metodo di classe, \textbf{statico} (non ha oggetto di invocazione), \textbf{pubblico} (accessibile da chiunque), con argomento di tipo \texttt{String[ ]} e senza valore di ritorno (\textbf{void}).
 Un programma deve avere una classe pubblica con il metodo main, invocato automaticamente all'inizio dell'esecuzione.
 \begin{verbatim}
 public static void main(String[ ] args){ }
 \end{verbatim}
 
 \section{Pacchetti - Package}
-Un file \textit{.java} contiene una classe \textbf{pubblica} che ha lo stesso nome del file. Le classi correlate tra loro stanno nello stesso pacchetto. Un pacchetto evita il conflitto di nomi.
+Un file \textit{.java} contiene una classe \textbf{pubblica} che ha lo stesso nome del file. Le classi correlate tra loro stanno nello stesso pacchetto. Un pacchetto evita il conflitto di nomi e serve a partizionare i moduli di un programma.
 Ogni file che appartiene ad un pacchetto deve avere la dichiarazione come prima istruzione.
 \begin{verbatim}
 package nomepacchetto;
 \end{verbatim}
 Il nome completo di una classe è quindi \textbf{nomepacchetto.nomeclasse}.
 Si può creare una gerarchia di pacchetti, ma non da privilegi di accesso tra i pacchetti.
-Per usare in una classe un tipo dello stesso pacchetto basta il nome della classe, mentre se si usa un tipo esterno serve il nome completo o si "include" il pacchetto che lo contiene (\texttt{import pacchetto.*;}) o si utilizza la "dichiarazione d'uso" (\texttt{import pacchetto.classe;}).
+Per usare in una classe un tipo dello stesso pacchetto basta il nome della classe, mentre se si usa un tipo esterno serve il nome completo o si "include" il pacchetto che lo contiene (\texttt{import pacchetto.*;}) o si utilizza la "dichiarazione d'uso" (\texttt{import pacchetto.classe;}). A differenza di C++, i pacchetti non vengono incluse fisicamente, quindi non influenzano le prestazioni.

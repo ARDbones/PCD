@@ -2,20 +2,19 @@
 
 \section{I tipi primitivi}
 Ogni tipo è una classe, compresi quelli base (es: Integer per int). 
-Per comodità esistono i tipi primitivi non classe: int, long, double, float, boolean, char. I valori di questi non sono oggetti. 
+Per comodità esistono i tipi primitivi non classe: int, long, double, float, boolean, char. I valori di questi non sono oggetti. \\
 Java è fortemente tipato, quindi un'espressione deve avere un valore compatibile, cioè stesso tipo o sottotipo secondo la relazione:
 \begin{verbatim}
 byte < short < int < long < float < double 
 \end{verbatim} 
-Non si può convertire implicitamente con perdita di informazioni! È necessario un typecast, ma se la conversione è tra tipi incompatibili (relazione sopra), dà comunque errore (es: int-bool).
+Non si può convertire implicitamente con perdita di informazioni! È necessario un typecast, ma se la conversione è tra tipi incompatibili (relazione sopra), dà comunque errore (es: int-bool). La conversione tra tipo primitivo e tipo wrapper (es: int-Integer) può avvenire in automatico.
 
 \section{Oggetti e riferimenti}
 Un oggetto viene costruito in due passaggi:
-\begin{itemize}
+\begin{enumerate}
 \item creazione del valore
 \item memorizzazione in una variabile
-\end{itemize}
-
+\end{enumerate}
 La variabile oggetto a cui si assegna il valore NON alloca memoria di un oggetto ed è chiamato riferimento.
 L'oggetto viene creato e allocato con la new + costruttore.
 Il riferimento è un puntatore all'oggetto e una dichiarazione alloca il puntatore e basta. L'accesso all'oggetto puntato non avviene attraverso la dereferenziazione ma tramite il riferimento.
@@ -27,52 +26,45 @@ L'assegnazione tra riferimenti copia i riferimenti, "spostando il puntatore", e 
 Stringhe ed array sono tipi classe, non primitivi.
 
 \subsection{Stringhe}
-String appartiene a java.lang ed è sempre incluso. 
-Le stringhe si possono indicare tra doppi apici: "stringa".
+String appartiene a \texttt{java.lang} ed è sempre incluso. 
+Le stringhe si possono indicare tra doppi apici: "stringa". In questo caso si dice che è una stringa letterale. \\
 Le stringhe occupano un certo spazio di memoria e si possono vedere come riferimenti a quell'area di memoria; quando viene utilizzata una stringa ci si riferisce al relativo spazio.
 Con \texttt{new String("prova")} si crea un oggetto che rappresenta la stringa.
-Quindi \texttt{String a= "prova";} è diverso da \texttt{String b=new String("prova");}.
+Quindi \texttt{String a = "prova";} è diverso da \texttt{String b = new String("prova");}. \\
 Due stringhe si possono concatenare con l'operatore +. È sempre possibile convertire un tipo T ad uno String; grazie a questo si può concatenare String+T qualsiasi.
 
 \subsection{Array}
 Sono usati per raggruppare valori dello stesso tipo:
-\begin{framed}
-\begin{verbatim}
-// riferimento=oggetto
-char[] s=new char[20]; // costruisce 20 variabili di tipo char
-class[] c=new class[200]; // costruisce 200 riferimenti ad oggetti di tipo class
-\end{verbatim}
-\end{framed}
-Gli oggetti effettivi vanno creati con le istruzioni \texttt{c[i]=new class();}.
-Gli array vengono inizializzati in automatico in base al tipo (numeri=0, char='\lstinline[breaklines=true]!\u0000!', bool=false, class=null).
+\begin{lstlisting}
+// riferimento = oggetto
+char[] s = new char[20];
+// costruisce 20 variabili di tipo char
+classe[] c = new classe[200];
+// costruisce 200 riferimenti ad oggetti di tipo classe
+\end{lstlisting}
+Gli oggetti effettivi vanno creati con le istruzioni \texttt{c[i]=new class();}. \\
+Gli array vengono inizializzati in automatico in base al tipo (numeri=0, char='\texttt{\textbackslash{}u0000}', bool=false, class=null).
 Si può inizializzare esplicitamente:
+\begin{lstlisting}
+String[] nomi = {"gigi", "pino"};
 
-\begin{framed}
-\begin{verbatim}
-String[] nomi={"gigi", "pino"};
-
-class[] c={new class(), new class()};
-\end{verbatim}
-\end{framed}
-
-Limiti di un array: da 0 a length (campo implicito dell'array). Java fa un controllo run-time per vedere se un indice su un array appartiene all'intervallo del relativo array.
+classe[] c = {new classe(), new classe()};
+\end{lstlisting}
+\textbf{Limiti di un array}: da 0 a \texttt{length} (campo implicito dell'array). Java fa un controllo run-time per vedere se un indice su un array appartiene all'intervallo del relativo array.
 Gli array possono avere più dimensioni:
 
-\begin{framed}
-\begin{verbatim}
+\begin{lstlisting}
 // crea un array di 3 elementi inizializzati a null
-int[][] mat= new int[3][] 
+int[][] mat = new int[3][] 
 // inizializza i 3 elementi con un array di 5 elementi
-mat[0]= new int[5]; 
-mat[1]= new int[5];
-mat[2]= new int[5];
+mat[0] = new int[5]; 
+mat[1] = new int[5];
+mat[2] = new int[5];
 // risulta un array 3 righe per 5 colonne
-\end{verbatim}
-\end{framed}
-
+\end{lstlisting}
 
 \section{Passaggio dei parametri}
-Unico modo per passare i parametri ai metodi è per valore, quindi i parametri formali sono inizializzati con copie degli attuali. Se è un tipo primitivo, non c'è side effect, mentre se è di tipo classe si (sull'oggetto, non sul riferimento).
+L'unico modo per passare i parametri ai metodi è per valore, quindi i parametri formali sono inizializzati con copie degli attuali. Se è un tipo primitivo, non c'è side effect, mentre se è di tipo classe si (sull'oggetto, non sul riferimento).
 
 \section{Overloading di metodi}
 Più metodi possono avere lo stesso nome, ma deve cambiare il numero e il tipo di parametri. Se cambia solo il tipo di ritorno non funziona.
@@ -115,9 +107,7 @@ Non esiste la lista di inizializzazione, né i valori di default per i parametri
 
 È utile avere costruttori a più parametri; in java sono costruttori annidati(?) che si invocano tra loro tramite il \texttt{this(…)}, che deve essere il primo statement del costruttore.
 
-\begin{framed}
-\begin{verbatim}
-
+\begin{lstlisting}
 public class Dipendente{
     
     private String nome;
@@ -136,9 +126,7 @@ public class Dipendente{
         this(" ");
     }    
 }
-
-\end{verbatim}
-\end{framed}
+\end{lstlisting}
 
 L'inizializzazione dei campi può quindi avvenire:
 
