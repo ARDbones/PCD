@@ -2,7 +2,8 @@
 
 \section{I tipi primitivi}
 Ogni tipo è una classe, compresi quelli base (es: Integer per int). 
-Per comodità esistono i tipi primitivi non classe: int, long, double, float, boolean, char. I valori di questi non sono oggetti. \\
+Per comodità esistono i tipi primitivi non classe: int, long, double, float, boolean, char. I valori di questi non sono oggetti.
+
 Java è fortemente tipato, quindi un'espressione deve avere un valore compatibile, cioè stesso tipo o sottotipo secondo la relazione:
 \begin{verbatim}
 byte < short < int < long < float < double 
@@ -19,18 +20,22 @@ La variabile oggetto a cui si assegna il valore NON alloca memoria di un oggetto
 L'oggetto viene creato e allocato con la new + costruttore.
 Il riferimento è un puntatore all'oggetto e una dichiarazione alloca il puntatore e basta. L'accesso all'oggetto puntato non avviene attraverso la dereferenziazione ma tramite il riferimento.
 
+Se viene usato un riferimento non inizializzato si ottiene l'eccezione \texttt{NullPointerException}.
+
 \section{Assegnazione e riferimenti}
-L'assegnazione tra riferimenti copia i riferimenti, "spostando il puntatore", e non copia l'oggetto. Se si perde l'accesso ad un oggetto, viene gestito dal garbage collector.
+L'assegnazione tra riferimenti copia i riferimenti, "spostando il puntatore", e non copia l'oggetto. Se si perde l'accesso ad un oggetto, viene gestito automaticamente dal garbage collector.
 
 \section{Stringhe ed Array}
 Stringhe ed array sono tipi classe, non primitivi.
 
 \subsection{Stringhe}
 String appartiene a \texttt{java.lang} ed è sempre incluso. 
-Le stringhe si possono indicare tra doppi apici: "stringa". In questo caso si dice che è una stringa letterale. \\
+Le stringhe si possono indicare tra doppi apici: "stringa". In questo caso si dice che è un letterale stringa.
+
 Le stringhe occupano un certo spazio di memoria e si possono vedere come riferimenti a quell'area di memoria; quando viene utilizzata una stringa ci si riferisce al relativo spazio.
 Con \texttt{new String("prova")} si crea un oggetto che rappresenta la stringa.
-Quindi \texttt{String a = "prova";} è diverso da \texttt{String b = new String("prova");}. \\
+Quindi \texttt{String a = "prova";} è diverso da \texttt{String b = new String("prova");}.
+
 Due stringhe si possono concatenare con l'operatore +. È sempre possibile convertire un tipo T ad uno String; grazie a questo si può concatenare String+T qualsiasi.
 
 \subsection{Array}
@@ -42,7 +47,8 @@ char[] s = new char[20];
 classe[] c = new classe[200];
 // costruisce 200 riferimenti ad oggetti di tipo classe
 \end{lstlisting}
-Gli oggetti effettivi vanno creati con le istruzioni \texttt{c[i]=new class();}. \\
+Gli oggetti effettivi vanno creati con le istruzioni \texttt{c[i]=new class();}.
+
 Gli array vengono inizializzati in automatico in base al tipo (numeri=0, char='\texttt{\textbackslash{}u0000}', bool=false, class=null).
 Si può inizializzare esplicitamente:
 \begin{lstlisting}
@@ -50,7 +56,8 @@ String[] nomi = {"gigi", "pino"};
 
 classe[] c = {new classe(), new classe()};
 \end{lstlisting}
-\textbf{Limiti di un array}: da 0 a \texttt{length} (campo implicito dell'array). Java fa un controllo run-time per vedere se un indice su un array appartiene all'intervallo del relativo array.
+\textbf{Limiti di un array}: da 0 a \texttt{length} (campo implicito dell'array). Java fa un controllo run-time per vedere se un indice su un array appartiene all'intervallo del relativo array. La dimensione dell'array una volta creato è fissa; per cambiare la dimensione si deve creare un nuovo array e "spostare il puntatore", ma si perde il contenuto. È disponibile \texttt{System.arraycopy()} per copiare il contenuto degli array, ma solo i riferimenti.
+
 Gli array possono avere più dimensioni:
 
 \begin{lstlisting}
@@ -68,20 +75,21 @@ L'unico modo per passare i parametri ai metodi è per valore, quindi i parametri
 
 \section{Overloading di metodi}
 Più metodi possono avere lo stesso nome, ma deve cambiare il numero e il tipo di parametri. Se cambia solo il tipo di ritorno non funziona.
+
 Il compilatore sceglie prima il metodo con i parametri dello stesso tipo, poi quello dove i parametri formali hanno il minimo supertipo (vedi relazione sopra) rispetto ai parametri attuali.
 Se c'è ambiguità, non compila.
 
 \section{Riferimento this}
-This è un riferimento all'oggetto corrente (d'invocazione?) e si può usare solo sui metodi non statici (ovvio).
+This è un riferimento all'oggetto d'invocazione e si può usare solo sui metodi non statici. Di solito si usa per passare l'oggetto di
+invocazione come un argomento di un metodo.
 
 \section{Controllo degli accessi a campi e metodi}
 Ci sono 4 modificatori di accessibilità:
 \begin{itemize}
-
-\item campo/metodo marcato private è accessibile all'interno alla classe
-\item campo/metodo senza marcatura ottiene accessibilità package, cioè è accessibile all'interno del pacchetto in cui è definito (pacchetto!=sottopacchetto)
-\item campo/metodo marcato protected è accessibile dal pacchetto e dalle sottoclassi
-\item campo/metodo marcato public è accessibile da chiunque
+\item campo/metodo marcato \textbf{private} è accessibile solo all'interno della classe
+\item campo/metodo senza marcatura ottiene accessibilità \textbf{package}, cioè è accessibile all'interno del pacchetto in cui è definito (pacchetto!=sottopacchetto)
+\item campo/metodo marcato \textbf{protected} è accessibile dal pacchetto e dalle sottoclassi
+\item campo/metodo marcato \textbf{public} è accessibile da chiunque
 \end{itemize}
 
 Anche una classe può avere diverse accessibilità:
@@ -93,19 +101,18 @@ Anche una classe può avere diverse accessibilità:
 
 \section{Costruttori}
 Comportamento del costruttore:
-\begin{itemize}
-\item viene allocato l'oggetto e i campi sono inizializzati a zero (vedi sopra)
+\begin{enumerate}
+\item viene allocato l'oggetto e i campi sono inizializzati a zero
 \item i campi sono inizializzati secondo i valori delle inizializzazioni esplicite
 \item viene eseguito il corpo del costruttore
-\end{itemize}
-
-
+\end{enumerate}
 Il costruttore ha il nome della classe, nessun tipo di ritorno, per default la stessa accessibilità della classe.
+
 Ogni classe ha il costruttore di default senza parametri ma la definizione di un costruttore disabilita lo standard di default.
 Non esiste il costruttore di copia, ma si usa un apposito metodo clone.
 Non esiste la lista di inizializzazione, né i valori di default per i parametri.
 
-È utile avere costruttori a più parametri; in java sono costruttori annidati(?) che si invocano tra loro tramite il \texttt{this(…)}, che deve essere il primo statement del costruttore.
+È utile avere costruttori a più parametri; in Java sono costruttori che si invocano tra loro tramite il \texttt{this(n\_parametri)}, che deve essere il primo statement del costruttore.
 
 \begin{lstlisting}
 public class Dipendente{
@@ -127,38 +134,43 @@ public class Dipendente{
     }    
 }
 \end{lstlisting}
-
 L'inizializzazione dei campi può quindi avvenire:
-
 \begin{itemize}
 \item con i costruttori
 \item con l'inizializzazione automatica a zero
-\item con l'inizializzazione esplicita, che può avvenire nel momento della dichiarazione del campo o in un apposito blocco di inizializzazione, un blocco dentro la classe ma esterno da metodi
+\item con l'inizializzazione esplicita, che può avvenire nel momento della dichiarazione del campo o in un apposito \textit{blocco di inizializzazione}, un blocco dentro la classe ma esterno da metodi
 \end{itemize}
 
-\begin{verbatim}
-
+\begin{lstlisting}
 // blocco di inizializzazione
 { 
     nome="esempio";
     stipendio=0;
 }
-
-\end{verbatim}
+\end{lstlisting}
  
 
 \section{Campi e metodi statici}
-I campi statici sono condivisi tra gli oggetti della classe; c'è una sola copia in memoria. Utile per la comunicazione tra oggetti, per esempio per contare le istanze create.
-Si usa con il nome della classe: C.s
-I metodi statici non hanno oggetto di invocazione e si usano con il nome della classe: C.m().
+I campi statici sono condivisi tra gli oggetti della classe; c'è una sola copia in memoria. Sono utili per la comunicazione tra oggetti, per esempio per contare le istanze create.Si usa con il nome della classe: \texttt{C.s}.
+
+I metodi statici non hanno oggetto di invocazione e si usano con il nome della classe: \texttt{C.m()}.
+
 All'interno della classe non serve richiamare il nome della classe.
 Metodi e campi statici vengono creati e inizializzati al caricamento della classe.
 
 \section{Caricamento di classi}
-Java carica il bytecode di una classe al primo statement che usa la classe. Se viene sono dichiarato un riferimento, non viene caricata la classe.
+Java carica il bytecode di una classe al primo statement che usa la classe. Se viene solo dichiarato un riferimento, non viene caricata la classe.
 
 \section{Inizializzazione dei campi statici}
-I campi statici si inizializzano tramite il blocco di inizializzazione con lo static davanti e viene eseguito quando la classe viene caricata. Se una classe ha più blocchi, vengono eseguiti sequenzialmente.
+I campi statici si possono inizializzare tramite il blocco di inizializzazione con lo static davanti e viene eseguito quando la classe viene caricata. Se una classe ha più blocchi, vengono eseguiti sequenzialmente.
+
+\begin{lstlisting}
+public static int n = 3;
+static {
+	// codice che fa qualcosa alla variabile statica
+	n++;
+}
+\end{lstlisting}
 
 \section{Tempo di vita e inizializzazione delle variabili}
 \begin{itemize}

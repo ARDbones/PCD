@@ -9,10 +9,31 @@ public static void main(String[ ] args){ }
 
 \section{Pacchetti - Package}
 Un file \textit{.java} contiene una classe \textbf{pubblica} che ha lo stesso nome del file. Le classi correlate tra loro stanno nello stesso pacchetto. Un pacchetto evita il conflitto di nomi e serve a partizionare i moduli di un programma.
+
 Ogni file che appartiene ad un pacchetto deve avere la dichiarazione come prima istruzione.
 \begin{verbatim}
 package nomepacchetto;
 \end{verbatim}
 Il nome completo di una classe è quindi \textbf{nomepacchetto.nomeclasse}.
 Si può creare una gerarchia di pacchetti, ma non da privilegi di accesso tra i pacchetti.
+
 Per usare in una classe un tipo dello stesso pacchetto basta il nome della classe, mentre se si usa un tipo esterno serve il nome completo o si "include" il pacchetto che lo contiene (\texttt{import pacchetto.*;}) o si utilizza la "dichiarazione d'uso" (\texttt{import pacchetto.classe;}). A differenza di C++, i pacchetti non vengono incluse fisicamente, quindi non influenzano le prestazioni.
+
+\section{Operatori logici}
+La valutazione degli operatori logici condizionali avviene per short-circuiting, cioè evitando di controllare il secondo operando se possibile. In particolare:
+\begin{itemize}
+\item \texttt{w \&\& z} - se w valuta a \textbf{false} allora z non viene valutato;
+\item \texttt{x || y} - se x valuta a \textbf{true} allora y non viene valutato.
+\end{itemize}
+
+\section{Costrutto \textit{enhanced for} - il for migliorato}
+In Java esiste il for migliorato (o anche foreach) che permette di semplificare le iterazioni di array e collezioni. Si usa ponendo tra parentesi il \texttt{tipo\_contenuto : nome\_contenitore}. Il costrutto itera automaticamente finchè sono presenti valori nel contenitore.
+
+\begin{lstlisting}
+int[] array = {1, 2, 3, 4, 5};
+for(int valore : array)
+{
+	// fai qualcosa con i valori, es:
+	System.out.println(valore);
+}
+\end{lstlisting}
