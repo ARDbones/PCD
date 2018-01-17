@@ -10,24 +10,26 @@ Dei metodi concreti possono invocare metodi astratti che a runtime verranno invo
 Una classe astratta non può avere metodi statici/final astratti perchè richiedono un dispatching statico. \\
 Una sottoclasse rimane astratta finché non definisce tutti i metodi astratti della base.
 
-Di solito le classi astratte si usano per l'\textit{ereditarietà di implementazione} perchè permettono di scrivere una struttura riutilizzabile dalle derivate.
+Di solito le classi astratte si usano per l'\textbf{ereditarietà di implementazione} perchè permettono di scrivere una struttura riutilizzabile dalle derivate.
 
 \section{Interfacce}
-Le interfacce si usano per l'ereditarietà di tipo. Le interfacce definiscono funzionalità su un tipo senza indicare come è implementato quel tipo. Si dichiara con la keyword interface Nome{…} e ha regole specifiche:
+Le interfacce si usano per l'\textbf{ereditarietà di tipo}. Le interfacce definiscono funzionalità su un tipo senza indicare come è implementato quel tipo. Si dichiara con la keyword \texttt{interface Nome\{…\}} e ha regole specifiche:
 \begin{itemize}
-\item possono dichiarare solo campi marcati public, static e final, e metodi astratti pubblici (abstract è implicito??)
-\item non può avere metodi statici (???)
+\item si può dichiarare solo campi marcati public static e final, e metodi astratti pubblici (abstract è implicito)
+\item non può avere metodi statici
 \item non sono istanziabili, neanche come sottooggetti, quindi non hanno il costruttore
-\item possono avere accessibilità public o package
+\item può avere accessibilità public o package
 \end{itemize}
-Un'interfaccia non può essere istanziata, quindi l'unico modo per usare il tipo dell'interfaccia è implementandola con una classe che ne definisce tutti i metodi. La classe diventa sottotipo, quindi è possibile usare un riferimento dell'interfaccia in maniera polimorfa. La classe implementa con la keyword implements. 
-Le interfacce permettono di implementare una sorta di “ereditarietà multipla” di tipo; infatti una classe può implementare più interfacce, ma estendere solo una classe. Può farlo contemporaneamente, prima extends, poi implements (extends A implements B, C).
-Le interfacce possono estendersi tra loro, formando gerarchie; è possibile fare dei cast e instance of. Non hanno un'interfaccia base comune, ma vale la relazione Interface$\le$Object.
-Relazione di sottotipo aggiornata: T1$\le$T2 se vale
+Un'interfaccia non può essere istanziata, quindi l'unico modo per usare il tipo dell'interfaccia è implementandola con una classe che ne definisce \textbf{tutti} i metodi. La classe diventa sottotipo, quindi è possibile usare un riferimento dell'interfaccia in maniera polimorfa. La classe implementa con la keyword \texttt{implements}. 
+
+Le interfacce permettono di implementare una sorta di “ereditarietà multipla” di tipo; infatti una classe può implementare più interfacce, ma estendere solo una classe. Può farlo contemporaneamente, prima \texttt{extends}, poi \texttt{implements} (\texttt{extends A implements B, C}).
+
+Le interfacce possono estendersi tra loro, formando gerarchie; è possibile fare dei cast e instanceof. Non hanno un'interfaccia base comune, ma vale la relazione Interface$\le$Object. \\
+\textbf{Relazione di sottotipo aggiornata}: T1$\le$T2 se vale
 \begin{itemize}
 \item T1 e T2 sono lo stesso tipo
 \item T1 è definito come T1 extends T2, T1 implements T2
-\item T1 e T2 sono tipi array, T1=A[], T2=B[] e A$\le$B
+\item T1 e T2 sono tipi array, T1=A[ ], T2=B[ ] e A$\le$B
 \item esiste un T3 tale che T1$\le$T3 e T3$\le$T2
 \item T2 è di tipo Object, anche se T1 è interfaccia
 \end{itemize}
@@ -35,18 +37,21 @@ Le conversioni cambiano leggermente. Se un riferimento ref ha come TS un'interfa
 
 \section{Classi interne}
 Le classi interne sono classi definite dentro ad altre classi, come membro (classi interne di istanza o statiche) o dentro un blocco di codice (classe interna locale). Un tipo innestato è parte del tipo che lo racchiude e entrambe possono accedere a tutti i membri dell'altra classe (anche privati!). Nota: Inner = tipo interno.
+
 Le classi interne possono essere private in modo da non essere accessibili dalle altre classi del package.
-NB: la classe interna non è sottotipo della classe contenitore.
-Classe interna di istanza: è considerata un membro, quindi ha un qualsiasi marcatore di accesso, anche static. Se la classe non è statica, un oggetto della classe interna ha un riferimento outerThis all'oggetto della classe esterna che lo ha creato.
+La classe interna non è sottotipo della classe contenitore.
+\paragraph{Classe interna di istanza} È considerata un membro, quindi ha un qualsiasi marcatore di accesso, anche static. Se la classe non è statica, un oggetto della classe interna ha un riferimento outerThis all'oggetto della classe esterna che lo ha creato.
 La classe interna può accedere a tutti i membri della classe esterna tramite l'outerThis, ovvero nomeClasseEsterna.this.membro.
 La classe contenitore può accedere a tutti i membri della classe interna tramite oggetti della classe interna.
 Per costruire un oggetto di tipo Inner è necessario usare la classe esterna. Se la classe non è statica, si usa this.new Inner(), mentre se è statica ref.new Inner(), dove ref è di tipo Esterno.
 Se la classe interna è accessibile dall'esterno, si può usare il tipo Inner anche al di fuori del contenitore tramite nomeClasseEsterna.Inner. 
 Non contiene membri statici.
 La classe interna può implementare un'interfaccia; in particolare se fatto privato viene nascosta dell'esterno e l'implementazione delle classi esterne non dipende da quella dell'interfaccia. Allo stesso modo è possibile fare classi interne che estendono una classe, creando una sorta di ereditarietà multipla.
-Classe interna statica: a volte non serve che la classe interna faccia riferimento ad un oggetto della esterna, quindi torna comodo dichiararla statica. In questo caso, non esiste l'outerThis e non serve un oggetto della classe esterna per crearne uno di quella interna. Però la classe interna non può accedere ai campi non statici della classe esterna.
+\paragraph{Classe interna statica}
+A volte non serve che la classe interna faccia riferimento ad un oggetto della esterna, quindi torna comodo dichiararla statica. In questo caso, non esiste l'outerThis e non serve un oggetto della classe esterna per crearne uno di quella interna. Però la classe interna non può accedere ai campi non statici della classe esterna.
 Si definisce statica se non ha bisogno di accedere ai membri non statici della classe esterna.
-Classe interna anonima: sono classi interne senza nome, di solito usate per implementare interfacce. Si possono creare oggetti di quella classe, ma non possono essere usati come tipi statici; non ha costruttori (a parte quello di default).
+\paragraph{Classe interna anonima}
+Sono classi interne senza nome, di solito usate per implementare interfacce. Si possono creare oggetti di quella classe, ma non possono essere usati come tipi statici; non ha costruttori (a parte quello di default).
 \begin{lstlisting}
 public interface Interfaccia { ... }
 
@@ -58,5 +63,6 @@ class C {
     }
 }
 \end{lstlisting} 
-Classi innestate in interfacce: anche le interfacce possono contenere classi e sono tutte statiche.
+\paragraph{Classi innestate in interfacce}
+Anche le interfacce possono contenere classi e sono tutte statiche.
 
