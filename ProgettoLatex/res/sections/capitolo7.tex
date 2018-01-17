@@ -13,9 +13,7 @@ Un programma è multithreaded quando consiste di più thread concorrenti.
 
 \section{Creare Thread in Java}
 Anche i thread sono oggetti della classe Thread. Ci sono due modi per creare un thread: estendere Thread o implementare Runnable.
-
-\begin{framed}
-\begin{verbatim}
+\begin{lstlisting}
 
 class C extends Thread{
     public void run(){ ..codice thread.. } // override
@@ -34,9 +32,7 @@ Thread t=new Thread(c);
 t.start(); // solo con questa invocazione
 				viene attivato il thread 
 
-\end{verbatim}
-\end{framed}
-
+\end{lstlisting}
 Differenze tra i due: oggetto Thread rappresenta il meccanismo che esegue l'attività logica del thread, oggetto Runnable rappresenta l'attività logica in sé.
 Implementare Runnable è utile a causa del vincolo di ereditarietà singola, mentre estendere Thread è utile quando si usano altri metodi di Thread.
 Thread permette di usare direttamente this per riferirsi al thread, mentre Runnable necessita il metodo statico \texttt{currentThread()}. \\
