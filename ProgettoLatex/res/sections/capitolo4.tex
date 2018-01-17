@@ -1,10 +1,16 @@
 \chapter{Organizzare le classi}
 
-La relazione tra classi si può distinguere tra “è un” ed “ha un”, ovvero ereditarietà di tipo e ereditarietà di implementazione. Quella di tipo si ha quando si estende effettivamente la classe e si sfrutta il polimorfismo, mentre quella di implementazione si ha quando è comodo riutilizzare il codice di un'altra classe.
-Classi astratte
-Si può creare una classe astratta con la keyword \texttt{abstract}. Questo permette di dichiarare metodi astratti (con abstract) che posso non definire. In compenso, non posso creare oggetti di quel tipo, ma si possono creare dei riferimenti che saranno sicuramente polimorfi. Una sottoclasse rimane astratta finché non definisce tutti i metodi astratti della base.
-Una derivata può ridefinire un metodo concreto della base in un metodo astratto.
-Di solito di usano per l'ereditarietà di implementazione.
+La relazione tra classi si può distinguere tra “è un” (\textit{is-a}) ed “ha un” (\textit{has-a}), ovvero ereditarietà di tipo e ereditarietà di implementazione. Quella di tipo si ha quando si estende effettivamente la classe e si sfrutta il polimorfismo, mentre quella di implementazione si ha quando è comodo riutilizzare il codice di un'altra classe.
+\section{Classi astratte}
+Si può creare una classe astratta con la keyword \texttt{abstract}. Questo permette di dichiarare metodi astratti (con \texttt{abstract}) che posso non definire. In compenso, non posso creare oggetti di quel tipo, ma si possono creare dei riferimenti che saranno sicuramente polimorfi.
+
+Se una classe contiene un metodo astratto, la classe va marcata astratta o si ha un errore.
+La classe astratta può avere dei campi dati; in questi casi viene definito un costruttore astratto che verrà richiamato dalle derivate.
+Dei metodi concreti possono invocare metodi astratti che a runtime verranno invocati virtualmente nel modo corretto.
+Una classe astratta non può avere metodi statici/final astratti perchè richiedono un dispatching statico. \\
+Una sottoclasse rimane astratta finché non definisce tutti i metodi astratti della base.
+
+Di solito le classi astratte si usano per l'\textit{ereditarietà di implementazione} perchè permettono di scrivere una struttura riutilizzabile dalle derivate.
 
 \section{Interfacce}
 Le interfacce si usano per l'ereditarietà di tipo. Le interfacce definiscono funzionalità su un tipo senza indicare come è implementato quel tipo. Si dichiara con la keyword interface Nome{…} e ha regole specifiche:

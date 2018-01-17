@@ -7,9 +7,14 @@ Object è la classe base implicita di ogni classe (non serve l'extends). Le clas
 \begin{itemize}
 \item \texttt{boolean equals(Object obj)} che verifica se due riferimenti puntano allo stesso oggetto; un riferimento è l'oggetto di invocazione, l'altro è parametro passato. 
 \item \texttt{String toString()} ritorna l'oggetto di invocazione in formato stringa; la versione di default restituisce il nome della classe e l'indirizzo del riferimento (quindi meglio ridefinirlo per classe).
-\item \texttt{void finalize()} è una sorta di “distruttore” invocato dal garbage collector su un oggetto senza riferimenti.
+\item \texttt{void finalize()} è una sorta di “distruttore” invocato dal garbage collector su un oggetto senza riferimenti; può aver senso ridefinirlo se si vuole rilasciare risorse o per eseguire azioni di clean-up.
 %\item clone()
 \end{itemize}
+
+\subsection{Operatore di uguaglianza VS equals()} % OK
+L'operatore == esegue un confronto tra il contenuto di variabili qualsiasi. Se sono riferimenti, ritorna true solo se entrambi si riferiscono allo stesso oggetto. Se entrambi sono null, l'uguaglianza è vera.
+
+L'\texttt{equals()} in versione non ridefinita, usato con \texttt{ref1.equals(ref2)}, ritorna true se si riferiscono allo stesso oggetto, esattamente come ==. L'\texttt{equals()} però in genere si ridefinisce per confrontare gli oggetti e non i riferimenti in modo da poter dire se due oggetti diversi possano essere considerati "uguali" secondo determinate condizioni.
 
 \section{Ereditarietà e contratti} % OK
 Una classe ha tre contratti:
@@ -46,50 +51,56 @@ Comportamento del costruttore di una derivata:
 \item vengono eseguite le inizializzazioni esplicite dei campi di D
 \item corpo del costruttore
 \end{itemize}
-Se super non è invocato, il compilatore inserisce una chiamata implicita al costruttore di default della base con super(); se quello di default non è disponibile, da errore.
+Se \texttt{super} non è invocato, il compilatore inserisce una chiamata implicita al costruttore di default della base con \texttt{super()}; se quello di default non è disponibile, da errore.
 
 
-\section{Polimorfismo}
+\section{Polimorfismo} % OK
 
 \textbf{Principio di sostituzione}: sia T1 sottotipo di T2, un oggetto di tipo T1 può essere usato in ogni contesto al posto di un oggetto di tipo T2. \\
 \textbf{Relazione di sottotipo}: T1$\le$T2 se:
 \begin{itemize}
+\item T1 e T2 sono dello stesso tipo
 \item T1 è definito come class T1 extends T2 (derivata)
 \item T1 e T2 sono tipi array, T1=A[ ], T2=B[ ] e A$\le$B
+\item Esiste un tipo T3 tale che T1$\le$T3 e T3$\le$T2
 \item T2 è Object
 \end{itemize}
 
-Tipo statico di un riferimento TS(ref) è il tipo con cui è stato dichiarato; tipo dinamico del riferimento TD(ref) è il tipo effettivo dell'oggetto a cui si riferisce. Vale sempre TD < TS.
+Tipo statico di un riferimento TS(ref) è il tipo con cui è stato dichiarato; tipo dinamico del riferimento TD(ref) è il tipo effettivo dell'oggetto a cui si riferisce. Vale sempre TD$\le$TS.
 
-In java non c'è distinzione tra ridefinizione e overriding. Tutti i metodi sono implicitamente virtuali se presenti in più classi. Ma un metodo ridefinito:
+In Java non c'è distinzione tra ridefinizione e overriding. Tutti i metodi sono implicitamente virtuali se presenti in più classi. Ma un metodo ridefinito:
 \begin{itemize}
 \item deve avere la stessa segnatura (nome, numero e tipo di argomenti, tipo di ritorno uguale o più piccolo)
 \item non può diventare meno accessibile del metodo originale
 \item non può sollevare più eccezioni del metodo originale
 \end{itemize}
-Binding (o dispatching): staticamente il compilatore controlla se esiste una definizione del metodo usato, dinamicamente viene scelta la ridefinizione più specifica rispetto al tipo dinamico (quindi con meno conversioni).
-Per i metodi statici e i campi dati il dispatching è sempre statico. Anche per i metodi privati (perché non possono essere ridefiniti) e quando viene invocato un metodo della superclasse con la keyword super. Super in modo simile al this si riferisce all'oggetto corrente ma con il tipo della superclasse. Quindi un super.m() invoca sempre il metodo della superclasse.
-L'overloading dei metodi non nasconde tutti i metodi della base, ma solo quelli con la stessa segnatura e tipo di ritorno.
+\textbf{Binding (o dispatching)}: staticamente il compilatore controlla se esiste una definizione del metodo usato, dinamicamente viene scelta la ridefinizione più specifica rispetto al tipo dinamico (quindi con meno conversioni).
 
-\section{Conversioni di tipo}
+Per i metodi statici e i campi dati il dispatching è sempre statico. Anche per i metodi privati (perché non possono essere ridefiniti) e quando viene invocato un metodo della superclasse con la keyword \texttt{super}. \texttt{super} in modo simile al \texttt{this} si riferisce all'oggetto corrente ma con il tipo della superclasse. Quindi un \texttt{super.m()} invoca sempre il metodo della superclasse.
+
+L'overloading dei metodi \textbf{non} nasconde tutti i metodi della base, ma solo quelli con la stessa segnatura e tipo di ritorno.
+
+\section{Conversioni di tipo} % OK
 Le conversioni sono possibili solo se un tipo è minore dell'altro. Se quello di partenza è più piccolo si chiama upcast, viceversa downcast.
 L'upcasting è sempre sicuro perché rispecchia il principio di sostituzione.
-Il downcasting si usa quando si ha la necessità di usare metodi specifici del tipo dinamico %(il dynamic_cast di C++); viene fatto esplicitamente con (tipoTarget)nomeVariabile. Questa operazione ritorna un riferimento con lo stesso valore ma tipo statico diverso, ma il riferimento originale ha ancora lo stesso tipo statico.
+
+Il downcasting si usa quando si ha la necessità di usare metodi specifici del tipo dinamico (il \textit{dynamic\_cast} di C++); viene fatto esplicitamente con \texttt{(tipoTarget)nomeVariabile}. Questa operazione ritorna un riferimento con lo stesso valore ma tipo statico diverso, ma il riferimento originale ha ancora lo stesso tipo statico.
+\begin{lstlisting}
 T1 ref=new T2();
 T2 nuovoRef=(T1)ref;
 // TS(ref)=T1, TS(nuovoRef)=T2, TD(entrambi)=T2.
-
+\end{lstlisting}
 La conversione T(ref):
 \begin{itemize}
 \item  staticamente compila se TS(ref) e T sono nella stessa gerarchia
-\item  dinamicamente è corretta se TD(ref)$\le$T, altrimenti eccezione ClassCastException
+\item  dinamicamente è corretta se TD(ref)$\le$T, altrimenti lancia l'eccezione \texttt{ClassCastException}
 \end{itemize}
 
-\section{Identificazione dei tipi run-time}
-Esiste l'operatore booleano ref instanceof T che permette di vedere se è possibile effettuare il downcasting; ritorna true se ref è non nullo e TD(ref)$\le$T.
+\section{Identificazione dei tipi run-time} % OK
+Esiste l'operatore booleano \texttt{ref instanceof T} che permette di vedere se è possibile effettuare il downcasting; ritorna true se ref è non nullo e TD(ref)$\le$T.
 
 \section{Keyword Final} % OK
-Final viene usato per indicare qualcosa di costante. Il riferimento this è implicitamente final. \\
+Final viene usato per indicare qualcosa di costante. Il riferimento \texttt{this} è implicitamente final. \\
 NB: non esistono oggetti costanti.
 
 Un campo dati marcato final è costante: non si può modificare il valore. Se è  statico e final deve essere inizializzato esplicitamente, altrimenti è errore; se è solo final, deve essere inizializzato esplicitamente o con il costruttore (l'inizializzazione automatica a zero non basta).
