@@ -44,13 +44,13 @@ private & Si & No & No & No \\
 Le derivate ereditano i campi della superclasse, ma non possono inizializzarli. Nei costruttori devono richiamare il costruttore della base tramite la keyword \texttt{super()}.
 
 Comportamento del costruttore di una derivata:
-\begin{itemize}
+\begin{enumerate}
 \item viene allocata la memoria per tutti i campi, sia propri che ereditati
 \item tutti i campi vengono inizializzati a zero
 \item viene richiamato il costruttore della superclasse diretta; è un passo ricorsivo e si risale fino a Object
 \item vengono eseguite le inizializzazioni esplicite dei campi di D
 \item corpo del costruttore
-\end{itemize}
+\end{enumerate}
 Se \texttt{super} non è invocato, il compilatore inserisce una chiamata implicita al costruttore di default della base con \texttt{super()}; se quello di default non è disponibile, da errore.
 
 
