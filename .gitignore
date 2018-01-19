@@ -12,3 +12,4 @@
 *.cb
 *.cb2
 *synctex.gz
+*.fdb_latexmk
