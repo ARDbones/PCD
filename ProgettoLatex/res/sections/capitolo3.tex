@@ -76,7 +76,7 @@ In Java non c'è distinzione tra ridefinizione e overriding. Tutti i metodi sono
 \end{itemize}
 \textbf{Binding (o dispatching)}: staticamente il compilatore controlla se esiste una definizione del metodo usato, dinamicamente viene scelta la ridefinizione più specifica rispetto al tipo dinamico (quindi con meno conversioni).
 
-Per i metodi statici e i campi dati il dispatching è sempre statico. Anche per i metodi privati (perché non possono essere ridefiniti) e quando viene invocato un metodo della superclasse con la keyword \texttt{super}. \texttt{super} in modo simile al \texttt{this} si riferisce all'oggetto corrente ma con il tipo della superclasse. Quindi un \texttt{super.m()} invoca sempre il metodo della superclasse.
+Per i metodi statici e i campi dati il dispatching è sempre statico. Anche per i metodi privati (perché non possono essere ridefiniti) e quando viene invocato un metodo della superclasse con la keyword \texttt{super}. \texttt{Super} in modo simile al \texttt{this} si riferisce all'oggetto corrente ma con il tipo della superclasse. Quindi un \texttt{super.m()} invoca sempre il metodo della superclasse.
 
 L'overloading dei metodi \textbf{non} nasconde tutti i metodi della base, ma solo quelli con la stessa segnatura e tipo di ritorno.
 
