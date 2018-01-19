@@ -40,30 +40,45 @@ Le interfacce hanno un grosso problema: non è possibile aggiungere metodi e fun
 Da Java 8 è possibile creare metodi statici in un'interfaccia, ma non possono essere ridefiniti dai sottotipi (vanno definiti nella prima dichiarazione).
 
 \section{Classi interne}
-Le classi interne sono classi definite dentro ad altre classi, come membro (classi interne di istanza o statiche) o dentro un blocco di codice (classe interna locale). Un tipo innestato è parte del tipo che lo racchiude e entrambe possono accedere a tutti i membri dell'altra classe (anche privati!). Nota: Inner = tipo interno.
+Le classi interne sono classi definite dentro ad altre classi, come membro (classi interne di istanza o statiche) o dentro un blocco di codice (classe interna locale). Un tipo innestato è parte del tipo che lo racchiude ed entrambe possono accedere a tutti i membri dell'altra classe (anche privati!).
 
 Le classi interne possono essere private in modo da non essere accessibili dalle altre classi del package.
-La classe interna non è sottotipo della classe contenitore.
-\paragraph{Classe interna di istanza} È considerata un membro, quindi ha un qualsiasi marcatore di accesso, anche static. Se la classe non è statica, un oggetto della classe interna ha un riferimento outerThis all'oggetto della classe esterna che lo ha creato.
-La classe interna può accedere a tutti i membri della classe esterna tramite l'outerThis, ovvero nomeClasseEsterna.this.membro.
+La classe interna non è sottotipo della classe contenitore. \\
+\textbf{Nota per gli esempi}: Inner = tipo interno, Outer = tipo esterno.
+
+\paragraph{Classe interna di istanza}
+È considerata un membro, quindi ha un qualsiasi marcatore di accesso e può essere static. Se la classe non è statica, un oggetto della classe interna ha un riferimento \texttt{outerThis} all'oggetto della classe esterna che lo ha creato.
+
+La classe interna può accedere a tutti i membri della classe esterna tramite l'\texttt{outerThis}, ovvero \texttt{Outer.this.membroEsterno}.
 La classe contenitore può accedere a tutti i membri della classe interna tramite oggetti della classe interna.
-Per costruire un oggetto di tipo Inner è necessario usare la classe esterna. Se la classe non è statica, si usa this.new Inner(), mentre se è statica ref.new Inner(), dove ref è di tipo Esterno.
-Se la classe interna è accessibile dall'esterno, si può usare il tipo Inner anche al di fuori del contenitore tramite nomeClasseEsterna.Inner. 
+
+Per costruire un oggetto di tipo Inner è necessario usare la classe esterna. Se la classe non è statica, si usa \texttt{this.new Inner()}, mentre se è statica \texttt{ref.new Inner()}, dove ref è di tipo Esterno.
+Se la classe interna è accessibile dall'esterno, si può usare il tipo Inner anche al di fuori del contenitore tramite \texttt{nomeClasseEsterna.Inner}. 
 Non contiene membri statici.
-La classe interna può implementare un'interfaccia; in particolare se fatto privato viene nascosta dell'esterno e l'implementazione delle classi esterne non dipende da quella dell'interfaccia. Allo stesso modo è possibile fare classi interne che estendono una classe, creando una sorta di ereditarietà multipla.
-\paragraph{Classe interna statica}
-A volte non serve che la classe interna faccia riferimento ad un oggetto della esterna, quindi torna comodo dichiararla statica. In questo caso, non esiste l'outerThis e non serve un oggetto della classe esterna per crearne uno di quella interna. Però la classe interna non può accedere ai campi non statici della classe esterna.
-Si definisce statica se non ha bisogno di accedere ai membri non statici della classe esterna.
+\vspace{2\parskip}
+\begin{lstlisting}
+Outer ref = new Outer();
+// se non e' statica
+Outer.Inner InnerObj = this.new Inner();
+// se e' statica
+Outer.Inner InnerObj = ref.new Inner();
+\end{lstlisting}
+La classe interna può implementare un'interfaccia; in particolare se fatto privato viene nascosta dall'esterno e l'implementazione delle classi esterne non dipende da quella dell'interfaccia. Allo stesso modo è possibile fare classi interne che estendono una classe, creando una sorta di ereditarietà multipla.
+
+\paragraph{Classe interna statica} % ok
+A volte non serve che la classe interna faccia riferimento ad un oggetto della esterna, quindi torna comodo dichiararla statica. In questo caso, non esiste l'\texttt{outerThis} e non serve un oggetto della classe esterna per crearne uno di quella interna. Però la classe interna non può accedere ai campi non statici della classe esterna.\\
+Si definisce statica se non ha bisogno di accedere ai membri non statici della classe esterna: la classe esterna estende una classe D1, mentre la classe interna estende D2; in questo modo la classe esterna può accedere anche ai campi di D2.
+
 \paragraph{Classe interna anonima}
 Sono classi interne senza nome, di solito usate per implementare interfacce. Si possono creare oggetti di quella classe, ma non possono essere usati come tipi statici; non ha costruttori (a parte quello di default).
 \begin{lstlisting}
-public interface Interfaccia { ... }
+public interface Interfaccia {...}
 
 class C {
     // metodo che ritorna un oggetto di un sottotipo anonimo a Interfaccia
-    public Interfaccia ritornaInt()
+    public Interfaccia ritornaInterfaccia()
     {
-        return new Interfaccia() { ... }
+        return new Interfaccia() {...}; // serve il punto e virgola!
     }
 }
 \end{lstlisting} 
