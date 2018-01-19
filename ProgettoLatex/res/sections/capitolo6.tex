@@ -11,6 +11,7 @@ In particolare:
 
 \section{Sollevare un'eccezione, blocchi try-catch, il costrutto finally}
 Un'eccezione viene lanciata dal throw creando un oggetto del tipo eccezione che si vuole lanciare. La throw blocca l'esecuzione e cerca il codice che deve gestirla.
+
 Se un metodo non gestisce l'eccezione al suo interno, è necessario indicare nella segnatura i tipi di eccezione che lancia.
 \begin{lstlisting}
 void m() throws Exc {
@@ -18,6 +19,7 @@ void m() throws Exc {
 }
 \end{lstlisting}
 Il codice che può sollevare eccezioni va in un blocco try e l'eccezione viene gestita dal primo catch di tipo compatibile. L'ordine delle clausole è da sottoclasse a superclasse, altrimenti la superclasse prende tutte le eccezioni.
+
 Al termine del blocco try-catch è possibile inserire il blocco finally, un blocco di codice che viene sempre eseguito, anche se nel try è stato eseguito un return. È un blocco di codice protetto, che esegue sempre, ed è utile per rilasciare le risorse.
 
 \section{Clausole throws e overriding di metodi}
