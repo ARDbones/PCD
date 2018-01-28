@@ -4,13 +4,14 @@
 In Java, errori ed eccezioni sono oggetti, appartenenti a classi derivate da \textbf{Throwable}, la superclasse base. Il tutto si può distinguere tra eccezioni controllate e non controllate; le prime sono casi anomali gestibili, le seconde sono errori logici irrimediabili.
 In particolare:
 \begin{itemize}
-\item \textbf{Error} è la sottoclasse degli errori severi/fatali, di solito non gestibili; terminano il programma (es: out of memory).
-\item \textbf{RuntimeException} racchiude gli errori logici che avvengono runtime, non gestibili perché sono effettivamente errori logici che richiedono una modifica del codice (es: divisione per zero, nullpointer, ecc).
-\item le rimanenti \textbf{Exception} vanno gestite, o viene segnalato un errore a compile time.
+\item \textbf{Error} è la sottoclasse degli errori severi/fatali, di solito \textbf{non} gestibili; terminano il programma (es: out of memory).
+\item \textbf{RuntimeException} racchiude gli errori logici che avvengono runtime, \textbf{non} gestibili perché sono effettivamente errori logici che richiedono una modifica del codice (es: divisione per zero, nullpointer, ecc).
+\item le rimanenti \textbf{Exception} vanno sempre gestite, o viene segnalato un errore a compile time.
 \end{itemize}
+Si può usare un'eccezione definita dall'utente creando una classe che estende \texttt{Exception}.
 
 \section{Sollevare un'eccezione, blocchi try-catch, il costrutto finally}
-Un'eccezione viene lanciata dal throw creando un oggetto del tipo eccezione che si vuole lanciare. La throw blocca l'esecuzione e cerca il codice che deve gestirla.
+Un'eccezione viene lanciata dal \texttt{throw} creando un oggetto del tipo eccezione che si vuole lanciare. La \texttt{throw} blocca l'esecuzione e cerca il codice che deve gestirla.
 
 Se un metodo non gestisce l'eccezione al suo interno, è necessario indicare nella segnatura i tipi di eccezione che lancia.
 \begin{lstlisting}
@@ -18,12 +19,19 @@ void m() throws Exc {
     try {throw new Exc("errore");}
 }
 \end{lstlisting}
-Il codice che può sollevare eccezioni va in un blocco try e l'eccezione viene gestita dal primo catch di tipo compatibile. L'ordine delle clausole è da sottoclasse a superclasse, altrimenti la superclasse prende tutte le eccezioni.
+Il codice che può sollevare eccezioni va in un blocco \texttt{try} e l'eccezione viene gestita dal primo \texttt{catch} di tipo compatibile. L'ordine delle clausole è da sottoclasse a superclasse, altrimenti la superclasse prende tutte le eccezioni. Se non si trova la \texttt{catch} adatta, l'eccezione viene rilanciata al metodo che ha invocato il metodo che ha lanciato l'eccezione; se non viene gestita, viene terminato il programma.
 
-Al termine del blocco try-catch è possibile inserire il blocco finally, un blocco di codice che viene sempre eseguito, anche se nel try è stato eseguito un return. È un blocco di codice protetto, che esegue sempre, ed è utile per rilasciare le risorse.
+Al termine del blocco try-catch è possibile inserire il blocco \texttt{finally}, un blocco di codice che viene sempre eseguito, anche se nel \texttt{try} è stato eseguito un return. È un blocco di codice protetto, che esegue sempre, ed è utile per rilasciare le risorse.
 
 \section{Clausole throws e overriding di metodi}
-Quando si hanno metodi ridefiniti con throws nella segnatura, il metodo ridefinito deve lanciare eccezioni che sono sottotipo del precedente e non deve avere più eccezioni. 
+Un metodo può non gestire l'eccezione al suo interno; in questo caso è necessario indicarlo nella segnatura con \texttt{throws Eccezione}.
+Quando si hanno metodi ridefiniti con \texttt{throws} nella segnatura, il metodo ridefinito deve lanciare eccezioni che sono sottotipo del precedente e non deve avere più eccezioni. 
 
-
+\section{RuntimeExceptions comuni}
+\begin{itemize}
+\item \texttt{ArithmeticException}: divisione per zero;
+\item \texttt{NullPointerException}: riferimento nullo;
+\item \texttt{ClassCastException}: cast dinamico fallito;
+\item \texttt{ArrayIndexOutOfBoundsException}: tentativo di accedere ad un elemento oltre i limiti di un array.
+\end{itemize}
 
