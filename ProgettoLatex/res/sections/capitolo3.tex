@@ -1,3 +1,4 @@
+
 \chapter{Ereditarietà}
 
 Una classe può avere solo una superclasse. Una derivata è indicata da \texttt{Class C extends nomeClasseBase{}}. 
@@ -7,7 +8,7 @@ Object è la classe base implicita di ogni classe (non serve l'extends). Le clas
 \begin{itemize}
 \item \texttt{boolean equals(Object obj)} che verifica se due riferimenti puntano allo stesso oggetto; un riferimento è l'oggetto di invocazione, l'altro è parametro passato. 
 \item \texttt{String toString()} ritorna l'oggetto di invocazione in formato stringa; la versione di default restituisce il nome della classe e l'indirizzo del riferimento (quindi meglio ridefinirlo per classe).
-\item \texttt{void finalize()} è una sorta di “distruttore” invocato dal garbage collector su un oggetto senza riferimenti; può aver senso ridefinirlo se si vuole rilasciare risorse o per eseguire azioni di clean-up.
+\item \texttt{void finalize()} è una sorta di "distruttore" invocato dal garbage collector su un oggetto senza riferimenti; può aver senso ridefinirlo se si vuole rilasciare risorse o per eseguire azioni di clean-up.
 %\item clone()
 \end{itemize}
 

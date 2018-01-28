@@ -1,16 +1,16 @@
 \chapter{Organizzare le classi}
 
-La relazione tra classi si può distinguere tra “è un” (\textit{is-a}) ed “ha un” (\textit{has-a}), ovvero ereditarietà di tipo e ereditarietà di implementazione. Quella di tipo si ha quando si estende effettivamente la classe e si sfrutta il polimorfismo, mentre quella di implementazione si ha quando è comodo riutilizzare il codice di un'altra classe.
+La relazione tra classi si può distinguere tra "è un" (\textit{is-a}) ed "ha un" (\textit{has-a}), ovvero ereditarietà di tipo e ereditarietà di implementazione. Quella di tipo si ha quando si estende effettivamente la classe e si sfrutta il polimorfismo, mentre quella di implementazione si ha quando è comodo riutilizzare il codice di un'altra classe.
 \section{Classi astratte}
 Si può creare una classe astratta con la keyword \texttt{abstract}. Questo permette di dichiarare metodi astratti (con \texttt{abstract}) che posso non definire. In compenso, non posso creare oggetti di quel tipo, ma si possono creare dei riferimenti che saranno sicuramente polimorfi.
 
 Se una classe contiene un metodo astratto, la classe va marcata astratta o si ha un errore.
 La classe astratta può avere dei campi dati; in questi casi viene definito un costruttore astratto che verrà richiamato dalle derivate.
 Dei metodi concreti possono invocare metodi astratti che a runtime verranno invocati virtualmente nel modo corretto.
-Una classe astratta non può avere metodi statici/final astratti perchè richiedono un dispatching statico. \\
+Una classe astratta non può avere metodi statici/final astratti perché richiedono un dispatching statico. \\
 Una sottoclasse rimane astratta finché non definisce tutti i metodi astratti della base.
 
-Di solito le classi astratte si usano per l'\textbf{ereditarietà di implementazione} perchè permettono di scrivere una struttura riutilizzabile dalle derivate.
+Di solito le classi astratte si usano per l'\textbf{ereditarietà di implementazione} perché permettono di scrivere una struttura riutilizzabile dalle derivate.
 
 \section{Interfacce}
 Le interfacce si usano per l'\textbf{ereditarietà di tipo}. Le interfacce definiscono funzionalità su un tipo senza indicare come è implementato quel tipo. Si dichiara con la keyword \texttt{interface Nome\{…\}} e ha regole specifiche:
@@ -22,7 +22,7 @@ Le interfacce si usano per l'\textbf{ereditarietà di tipo}. Le interfacce defin
 \end{itemize}
 Un'interfaccia non può essere istanziata, quindi l'unico modo per usare il tipo dell'interfaccia è implementandola con una classe che ne definisce \textbf{tutti} i metodi. La classe diventa sottotipo, quindi è possibile usare un riferimento dell'interfaccia in maniera polimorfa. La classe implementa con la keyword \texttt{implements}. 
 
-Le interfacce permettono di implementare una sorta di “ereditarietà multipla” di tipo; infatti una classe può implementare più interfacce, ma estendere solo una classe. Può farlo contemporaneamente, prima \texttt{extends}, poi \texttt{implements} (\texttt{extends A implements B, C}).
+Le interfacce permettono di implementare una sorta di "ereditarietà multipla" di tipo; infatti una classe può implementare più interfacce, ma estendere solo una classe. Può farlo contemporaneamente, prima \texttt{extends}, poi \texttt{implements} (\texttt{extends A implements B, C}).
 
 Le interfacce possono estendersi tra loro, formando gerarchie; è possibile fare dei cast e instanceof. Non hanno un'interfaccia base comune, ma vale la relazione Interface$\le$Object. \\
 \textbf{Relazione di sottotipo aggiornata}: T1$\le$T2 se vale
@@ -35,7 +35,7 @@ Le interfacce possono estendersi tra loro, formando gerarchie; è possibile fare
 \end{itemize}
 Le conversioni cambiano leggermente. Se un riferimento ref ha come TS un'interfaccia, è sempre possibile convertire esplicitamente ref a qualsiasi classe, senza dare errori a compile time. Può però dare ClassCastException dinamicamente se TD(ref) non è $\le$T.
 
-Le interfacce hanno un grosso problema: non è possibile aggiungere metodi e funzionalità successivamente perchè invalidano tutte le classi che hanno implementato l'interfaccia. Da Java 8 esistono i metodi di default (\textbf{defender methods} \footnote{\url{https://dzone.com/articles/introduction-default-methods}}) che servono a risolvere questo problema. Questi metodi hanno un'implementazione di default della funzione così da permettere di far evolvere un'interfaccia senza invalidare le classi che l'hanno implementata. Se una classe eredita due implemetazione del metodo di default, verrà scelta la scelta quella della classe concreta più specifica.
+Le interfacce hanno un grosso problema: non è possibile aggiungere metodi e funzionalità successivamente perché invalidano tutte le classi che hanno implementato l'interfaccia. Da Java 8 esistono i metodi di default (\textbf{defender methods} \footnote{\url{https://dzone.com/articles/introduction-default-methods}}) che servono a risolvere questo problema. Questi metodi hanno un'implementazione di default della funzione così da permettere di far evolvere un'interfaccia senza invalidare le classi che l'hanno implementata. Se una classe eredita due implemetazione del metodo di default, verrà scelta la scelta quella della classe concreta più specifica.
 
 Da Java 8 è possibile creare metodi statici in un'interfaccia, ma non possono essere ridefiniti dai sottotipi (vanno definiti nella prima dichiarazione).
 
@@ -47,7 +47,7 @@ La classe interna non è sottotipo della classe contenitore. \\
 \textbf{Nota per gli esempi}: Inner = tipo interno, Outer = tipo esterno.
 
 \paragraph{Classe interna di istanza}
-È considerata un membro, quindi ha un qualsiasi marcatore di accesso e può essere static. Se la classe non è statica, un oggetto della classe interna ha un riferimento \texttt{outerThis} all'oggetto della classe esterna che lo ha creato.
+È considerata un membro, quindi ha un qualsiasi marcatore di accesso e può essere static. Se la classe non è statica, un oggetto della classe interna ha un riferimento "\texttt{outerThis}\footnote{Nota: non esiste letteralmente la keyword outerThis!}" all'oggetto della classe esterna che lo ha creato.
 
 La classe interna può accedere a tutti i membri della classe esterna tramite l'\texttt{outerThis}, ovvero \texttt{Outer.this.membroEsterno}.
 La classe contenitore può accedere a tutti i membri della classe interna tramite oggetti della classe interna.
