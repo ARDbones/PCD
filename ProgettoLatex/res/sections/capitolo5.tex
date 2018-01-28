@@ -69,4 +69,105 @@ La JVM attua il \textit{type erasure}, ovvero per ogni generic sostituisce il ti
 \end{itemize}
 
 \section{Collezioni}
-Le collezioni in Java corrispondono ai contenitori, dove un oggetto rappresenta un insieme di oggetti. Mentre gli array in Java hanno una lunghezza fissa, 
+Le collezioni in Java corrispondono ai contenitori, dove un oggetto rappresenta un insieme di oggetti. Mentre gli array in Java hanno una lunghezza fissa, un tipo Collection è un array dinamico di Object.
+
+Esistono delle apposite collezioni per la concorrenza introdotte da Java 7 che sono considerate \textit{thread-safe}.
+
+\subsection{Interfaccia List}
+Rappresenta una sequenza di elementi. 
+\paragraph{ArrayList}
+Rappresenta un array ridimensionabile. Non è thread-safe. \\ Alcune operazioni:
+\begin{itemize}
+\item \texttt{size}
+\item \texttt{isEmpty}
+\item \texttt{get}
+\item \texttt{set}
+\item \texttt{itarator}
+\item \texttt{listIterator}
+\item \texttt{add}
+\item \texttt{contains}
+\item \texttt{indexOf} - simile a contains, ma ritorna l'indice dell'elemento (se presente)
+\item \texttt{remove}
+\end{itemize}
+Costruttori:
+\begin{itemize}
+\item \texttt{ArrayList()} - lista con capacità iniziale a 10;
+\item \texttt{ArrayList(Collection c)} - costruisce una lista contenente gli elementi della collezione passata;
+\item \texttt{ArrayList(int capacità)} - costruisce una lista vuota di con una certa capacità iniziale.
+\end{itemize}
+\textbf{Nota bene}: la capacità non implica che venga creato un oggetto nullo! Quindi se cerco di ottenere un elemento con il \texttt{get(i)} viene lanciata l'eccezione \texttt{IndexOutOfBoundsException} se \textbf{i} non corrisponde ad un elemento inizializzato.
+
+\paragraph{LinkedList}
+Rappresenta una lista doppiamente linkata. Non è thread-safe. \\ Presenta le stesse operazioni di \texttt{ArrayList} e alcune operazioni in più:
+\begin{itemize}
+\item \texttt{offer} - aggiunge un elemento in coda;
+\item \texttt{peek} - ritorna il primo elemento della lista;
+\item \texttt{pop} - ritorna e rimuove il primo elemento della lista;
+\item \texttt{push} - inserisce un elemento in fronte.
+\end{itemize}
+Costruttori:
+\begin{itemize}
+\item \texttt{LinkedList()} - lista con capacità iniziale a 10;
+\item \texttt{LinkedList(Collection c)} - costruisce una lista contenente gli elementi della collezione passata.
+\end{itemize}
+
+\subsection{Interfaccia Map}
+Rappresenta un array associativo chiave-valore.
+\paragraph{HashMap}
+Insieme di coppie chiave-valore non ordinati. Non è thread-safe. Alcune operazioni:
+\begin{itemize}
+\item \texttt{clear}
+\item \texttt{clone}
+\item \texttt{containsKey}
+\item \texttt{containsValue}
+\item \texttt{entrySet}
+\item \texttt{keySet}
+\item \texttt{get}
+\item \texttt{put}
+\item \texttt{size}
+\item \texttt{remove}
+\end{itemize}
+Costruttori:
+\begin{itemize}
+\item \texttt{HashMap()} - mappa con capacità iniziale a 16 e fattore di carico a 0.75;
+\item \texttt{HashMap(int capacità)} - costruisce una lista vuota di con una certa capacità iniziale e fattore di carico 0.75;
+\item \texttt{HashMap(int capacità, float carico)} - costruisce una lista vuota di con una certa capacità iniziale e un certo carico;
+\item \texttt{HashMap(Map m)} - costruisce una mappa contenente gli elementi della collezione passata;
+\end{itemize}
+NOTA: MANCA UNA PARTE
+
+\paragraph{TreeMap}
+Insieme di coppie chiave-valore ordinati secondo la chiave tramite un albero rosso-nero. Non è thread-safe. 
+
+\subsection{Interfaccia Set}
+Collezione di elementi che non può contenere duplicati.
+
+\paragraph{HashSet}
+Implementa un Set sfruttando le caratteristiche di un HashMap.
+
+
+\paragraph{TreeSet}
+Implementa un Set ordinato secondo l'ordine naturale degli elementi. Sfrutta l'albero rosso-nero. Non è thread-safe.
+
+
+\subsection{Classe Collections}
+\texttt{Collections} è una classe che ha solo metodi statici e generici per agire sulle collezioni. Alcuni metodi\footnote{Ndr: la segnatura dei seguenti metodi è stata semplificata; leggere la documentazione Java per sapere la segnatura completa.}:
+\begin{itemize}
+\item \texttt{boolean addAll(Collection c, T... elements)} - aggiunge alla collezione gli elementi (più di uno);
+\item \texttt{int binarySearch(List L, T key)} - cerca nella lista l'argomento key; 
+\item \texttt{void fill(List L, T obj)} - rimpiazza tutti gli elementi della lista con l'elemento obj;
+\item \texttt{void sort(List L)} - ordina gli elementi in ordine ascendente;
+\item \texttt{void copy(List Out, List In)} - copia gli elementi dalla lista \textbf{In} alla lista \textbf{Out}.
+\end{itemize}
+
+
+\subsection{Classe Arrays}
+La classe \texttt{Arrays} offre metodi per operare su strutture lineari (array e liste). Alcuni metodi\footnote{Ndr: vedi nota sopra.}:
+\begin{itemize}
+\item \texttt{List asList(T... a)} - ritorna una lista dall'array passato;
+\item \texttt{int binarySearch(...)} - ricerca l'oggetto key nel range specificato; 
+\item \texttt{T[] copyOf(T[] originale, int newLength)} - per ridimensionare un array;
+\item \texttt{String deepToString(Object[] a)} - un \texttt{toString} sui contenuti; 
+\item \texttt{boolean deepEquals(Object[] a, Object[] b)} - un \texttt{equals} sui contenuti; 
+\item \texttt{void sort(Object[] a)} - ordina gli elementi. 
+\end{itemize}
