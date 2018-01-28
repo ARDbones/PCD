@@ -1,5 +1,72 @@
-\chapter{Programmare interfacce grafiche}
+\chapter{Generics e Collezioni}
 
-Le interfacce [...].
+\section{Generics}
+In Java sono presenti i template di funzione e di classe, e si chiamano funzioni/classi generiche. La definizione utilizza un tipo parametrico T che deve essere specificato quando si vuole usare un'istanza di quel template\footnote{Ndr: ognivolta che verrà usato "template" si intende un qualsiasi Generic.} di classe/interfaccia, mentre per i metodi viene dedotto dal compilatore. Il tipo T non può essere un primitivo; vengono accettati solo tipi classe e interfaccia.
+Per definire un generic si usano le parentesi angolari:
+\begin{lstlisting}
+public class Classe<T,Z> { }
 
-\footnote{Le interfacce non sono argomento d'esame}
+public interface Interfaccia<T> { }
+
+public <T> void f(T[] array) { }
+\end{lstlisting}
+
+Un metodo statico che utilizza un tipo parametrico deve essere un metodo generico o si ha un errore di compilazione. 
+\begin{lstlisting}
+public class Classe<T>{
+	public static <T> void m(T[] arg) { }
+}
+\end{lstlisting}
+
+Se un generic viene esteso o implementato, deve essere indicato il tipo esplicitamente nella segnatura.
+
+\subsection{Vincoli sui tipi delle variabili e Wildcards}
+È possibile porre dei vincoli sui tipi accettabili dal template per evitare errori logici (es: String in un template che confronta numeri). I vincoli sono espressi all'interno delle parentesi angolari indicando quali classi estende:
+
+\begin{lstlisting}
+public static <T extends C> min(T[ ] arg){ }
+// dove C e' la classe/interfaccia base
+\end{lstlisting}
+Nell'esempio è sensato usare l'interfaccia \texttt{Comparable} al posto di C.
+Se si vuole che T sia sottotipo di più tipi, si usa \texttt{<T extends A \& ... \& C>}. Nell'elenco devono andare prima la classe, poi le interfacce.
+
+Un altro modo per porre dei vincoli e l'utilizzo di \textbf{wildcards}, cioè dei caratteri jolly che hanno un significato implicito.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Nome} & \textbf{Sintassi} & \textbf{Significato} \\
+\hline
+upper bounded & ? extends B & qualsiasi sottotipo di B \\
+\hline
+lower bounded & ? super B & qualsiasi supertipo di B \\
+\hline
+unbounded & ? & qualsiasi tipo \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Generics e Ereditarietà}
+Se un tipo è l'estensione di un altro, non comporta che lo siano anche le classi generiche istanziate. 
+\begin{lstlisting}
+class Dirigente extends Dipendente {...}
+class Agente extends Dipendente {...}
+ArrayList<Dirigente> a = new ArrayList<Dirigente>();
+ArrayList<Dipendente> b = a; // NON FUNZIONA
+Dipendente dip = new Agente();
+b.add(dip); 
+\end{lstlisting}
+Ad esempio non è possibile usare un \texttt{ArrayList<Double>} al posto di un \texttt{ArrayList<Object>}, anche se Double$\le$Object.
+
+\subsection{Type erasure}
+La JVM attua il \textit{type erasure}, ovvero per ogni generic sostituisce il tipo parametrico con il primo bound o con Object se è unbounded. In questo modo le verifiche avvengono a compile time. A causa del type erasure di Java non è possibile:
+\begin{itemize}
+\item costruire oggetti che sono istanze del tipo parametro \texttt{new T()}
+\item costruire un array del tipo parametro \texttt{new T[k]}
+\item usare il tipo di una classe generica per definire campi dati statici, metodi statici o classi
+\item fare overloading di metodi dove cambia solo il tipo parametrico
+\end{itemize}
+
+\section{Collezioni}
+Le collezioni in Java corrispondono ai contenitori, dove un oggetto rappresenta un insieme di oggetti. Mentre gli array in Java hanno una lunghezza fissa, 
