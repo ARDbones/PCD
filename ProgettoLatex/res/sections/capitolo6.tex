@@ -19,7 +19,13 @@ void m() throws Exc {
     try {throw new Exc("errore");}
 }
 \end{lstlisting}
-Il codice che può sollevare eccezioni va in un blocco \texttt{try} e l'eccezione viene gestita dal primo \texttt{catch} di tipo compatibile. L'ordine delle clausole è da sottoclasse a superclasse, altrimenti la superclasse prende tutte le eccezioni. Se non si trova la \texttt{catch} adatta, l'eccezione viene rilanciata al metodo che ha invocato il metodo che ha lanciato l'eccezione; se non viene gestita, viene terminato il programma.
+
+Il codice che può sollevare eccezioni va in un blocco \texttt{try} e l'eccezione viene gestita dal primo \texttt{catch} di tipo compatibile. L'ordine delle clausole è da sottoclasse a superclasse, altrimenti la superclasse prende tutte le eccezioni. Se non si trova la \texttt{catch} adatta, l'eccezione viene rilanciata al metodo che ha invocato il metodo che ha lanciato l'eccezione; se non viene gestita, viene terminato il programma. Una \texttt{catch} non può catturare più eccezioni in relazione di tipo tra loro.
+\begin{lstlisting}
+catch(EccezioneBase B | EccezioneDerivata D){}
+\\ Il compilatore segna un errore
+\end{lstlisting}
+
 
 Al termine del blocco try-catch è possibile inserire il blocco \texttt{finally}, un blocco di codice che viene sempre eseguito, anche se nel \texttt{try} è stato eseguito un return. È un blocco di codice protetto, che esegue sempre, ed è utile per rilasciare le risorse.
 
@@ -35,3 +41,12 @@ Quando si hanno metodi ridefiniti con \texttt{throws} nella segnatura, il metodo
 \item \texttt{ArrayIndexOutOfBoundsException}: tentativo di accedere ad un elemento oltre i limiti di un array.
 \end{itemize}
 
+\section{Try-with-resources}
+Il \texttt{try-with-resources} è stato introdotto da Java 7 e serve per semplificare il normale flusso try-catch-finally quando si usano degli stream. 
+\begin{lstlisting}
+try(InputStream in = new FileInputStream("Input");
+OutputStream out = new FileOutputStream("Changed-Input")){
+// codice che lavora con lo stream
+}
+\end{lstlisting}
+Con questa struttura le risorse vengono automaticamente chiuse quando si esce dal blocco try. L'eventuale eccezione lanciata verrà passata al chiamante.
