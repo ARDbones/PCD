@@ -1,4 +1,4 @@
-\chapter{Stream e File}
+\chapter{Stream, File e Lambda expressions}
 
 \section{Stream e \texttt{java.io}}
 In Java le operazioni di input e output sono trattate considerando i dati come flusso (stream). Lo stream é un'astrazione dei dispositivi di input/output: si apre lo stream, si leggono/scrivono i dati, si chiude lo stream.
@@ -8,42 +8,41 @@ In Java gli stream sono istanze di classi raccolte nel package \texttt{java.io}.
  \item flusso di caratteri, usati per la lettura/scrittura di testo
  \item flusso di byte, usati per la trasmissione di dati in codice binario
 \end{itemize}
-
 Alla base delle gerarchie si trovano delle classi astratte con le operazioni di base:
 
 \begin{lstlisting}
 class Reader{
-	int read();
-	int read(char[] buff);
-	abstract int read(char[] buff, int off, int cnt);
-	int skip(long count);
-	abstract void close();
-	boolean ready();
+	int read()
+	int read(char[] buff)
+	abstract int read(char[] buff, int off, int cnt)
+	int skip(long count)
+	abstract void close()
+	boolean ready()
 }
 
 class Writer{
-	void write(char b);
-	void write(String r);
-	abstract void write(char[] buff, int off, int cnt);
-	abstract void close();
-	abstract void flush();
+	void write(char b)
+	void write(String r)
+	abstract void write(char[] buff, int off, int cnt)
+	abstract void close()
+	abstract void flush()
 }
 
 class InputStream{
-	abstract int read();
-	int read(byte[] buff);
-	int read(byte[] buff, int off, inf cnf);
-	int skip(long count);
-	void close();
-	boolean available();
+	abstract int read()
+	int read(byte[] buff)
+	int read(byte[] buff, int off, inf cnf)
+	int skip(long count)
+	void close()
+	boolean available()
 }
 
 class OutputStream{
-	abstract void write(byte b);
-	void write(byte[] buff);
-	void write(byte[] buff, int off, int cnt);
-	void close();
-	void flush();
+	abstract void write(byte b)
+	void write(byte[] buff)
+	void write(byte[] buff, int off, int cnt)
+	void close()
+	void flush()
 }
 \end{lstlisting}
 
