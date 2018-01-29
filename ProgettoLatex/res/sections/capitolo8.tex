@@ -91,4 +91,13 @@ Le espressioni Lambda vengono tradotte dal compilatore in funzioni di \textbf{in
 \end{itemize}
 
 \section{Stream API}
-
+L'interfaccia \texttt{Stream} è stata introdotta da Java 8 in supporto alle operazioni sequenziali e parallele su un flusso. Uno stream di solito riassume una sequenza di passi su un insieme di oggetti (es: array o collezione). Non produce side-effect. Gli elementi dello stream vengono visitati una sola volta. Operazioni su steam, che possono essere intermedie (ritornano uno stream) o terminali (ritornano un valore):
+\begin{itemize}
+\item \texttt{filter()} - ritorna uno stream con gli elementi filtrati secondo il predicato passato [Intermedia]
+\item \texttt{map()} - ritorna uno stream con gli elementi ai quali ho applicato la funzione passata [Intermedia]
+\item \texttt{distinct()} - ritorna uno steam con elementi distinti [Intermedia]
+\item \texttt{sorted()} - ritorna uno stream con gli elementi ordinati [Intermedia]
+\item \texttt{forEach()} - compie un azione per ogni elemento dello stream [Terminale]
+\item \texttt{count()} - ritorna il numero di elementi dello stream [Terminale]
+\item \texttt{allMatch()} - ritorna true se tutti gli elementi rendono true il predicato [Terminale]
+\end{itemize}
