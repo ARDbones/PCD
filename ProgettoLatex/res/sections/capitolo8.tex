@@ -52,12 +52,43 @@ Alcuni gruppi di classi che estendono le precedenti:
 \item flussi \texttt{Buffered}, che aggiungono la presenza di un buffer per ridurre gli accessi ai dispositivi di input/output
 \item flussi \texttt{Piped}, che sono coppie di flussi in cui si legge in uno e si scrive nell'altro
 \end{itemize}
-
 I flussi standard (tastiera e video), sono flussi di byte.
 
 \section{Stream e file}
 Quando si trasmette con un file, serve la classe adeguata. Per i caratteri si usa \texttt{FileReader} e \texttt{FileWriter}, mentre per i byte si usa \texttt{FileInputStream} e \texttt{FileOutputStream}.
-L'accesso al file puo' essere sequenziale o diretto.
+L'accesso al file può essere sequenziale o diretto.
 
 \section{Serializzazione}
+I dati trasmessi in input/output a volte possono essere proprio degli oggetti. Con \texttt{ObjectInputStream e ObjectOutputStream} è possibile rappresentare flussi di oggetti. 
+
+Non tutti gli oggetti vanno bene: solo quelli che implementano l'interfaccia \texttt{Serializable}. L'interfaccia non ha metodi e serve solo a marcare che gli oggetti possono essere trasmessi tramite stream. Viene lanciata l'eccezione \texttt{(NotSerializableException} se si usa un oggetto che non implementa Serializable.
+
+La serializzazione è il processo che trasforma un oggetto in un'opportuna sequenza di byte (\texttt{writeObject(obj)}) e viceversa (\texttt{readObject()} - deserializzazione). La deserializzazione ritorna un oggetto di tipo \texttt{Object}, quindi sta al programmatore fare un cast corretto in base al tipo adatto. 
+
+Non tutti i tipi sono serializzabili. Tuttavia quando si serializza un oggetto, devono essere serializzati tutti i campi, soprattutto se sono riferimenti ad altri oggetti che però possono essere non serializzabili. In questi casi si può implementare la serializzazione custom:
+\begin{itemize}
+\item la classe deve avere il costruttore senza argomenti
+\item la classe deve implementare i due metodi di lettura/scrittura
+\item i campi non serializzabili vanno indicati con la keyword \texttt{transient}
+\end{itemize}
+
+\section{Espressioni Lambda}
+Un'espressione Lambda in Java è un metodo senza dichiarazione esplicita con una forma \texttt{(parametri) -> \{corpo\}}.
+Regole generiche:
+\begin{itemize}
+\item i parametri possono essere più di uno, separati da virgola, ma anche nessuno
+\item le parentesi dei parametri si possono omettere se è un solo parametro
+\item il tipo dei parametri può essere implicito o esplicito
+\item le parentesi del corpo possono venire omesse se è un solo statement
+\end{itemize}
+
+Le espressioni Lambda vengono tradotte dal compilatore in funzioni di \textbf{interfacce funzionali}. Le interfacce funzionali contengono un singolo metodo astratto \textit{il quale è la traduzione dell'espressione} (incerto). Esistono delle interfacce già definite come:
+\begin{itemize}
+\item \texttt{Function} - accetta un argomento di tipo T e ritorna un tipo R
+\item \texttt{Supplier} - nessun argomento e ritorna un tipo R
+\item \texttt{Consumer} 
+\item \texttt{Predicate} - un solo argomento e ritorna boolean 
+\end{itemize}
+
+\section{Stream API}
 
