@@ -12,7 +12,7 @@ Object è la classe base implicita di ogni classe (non serve l'extends). Le clas
 %\item clone()
 \end{itemize}
 
-\subsection{Operatore di uguaglianza VS equals()} % OK
+\subsection{Operatore di uguaglianza VS equals} % OK
 L'operatore == esegue un confronto tra il contenuto di variabili qualsiasi. Se sono riferimenti, ritorna true solo se entrambi si riferiscono allo stesso oggetto. Se entrambi sono null, l'uguaglianza è vera.
 
 L'\texttt{equals()} in versione non ridefinita, usato con \texttt{ref1.equals(ref2)}, ritorna true se si riferiscono allo stesso oggetto, esattamente come ==. L'\texttt{equals()} però in genere si ridefinisce per confrontare gli oggetti e non i riferimenti in modo da poter dire se due oggetti diversi possano essere considerati "uguali" secondo determinate condizioni.
@@ -99,6 +99,17 @@ La conversione T(ref):
 
 \section{Identificazione dei tipi run-time} % OK
 Esiste l'operatore booleano \texttt{ref instanceof T} che permette di vedere se è possibile effettuare il downcasting; ritorna true se ref è non nullo e TD(ref)$\le$T.
+
+\subsection{Classe Class}
+Ogni classe è rappresentata da un oggetto della classe \texttt{Class}. Con \texttt{Class forName(String s)} è possibile ottenere l'oggetto che rappresenta la classe di nome \textbf{s}. \\
+Il metodo \texttt{ref.getClass()} ritorna un oggetto di tipo \texttt{Class} che rappresenta il tipo dinamico del riferimento \texttt{ref}.
+Altri metodi:
+\begin{itemize}
+\item \texttt{String getName()}
+\item \texttt{Class getSuperclass()}
+\item \texttt{boolean isInterface()}
+\item \texttt{Class[ ] getInterfaces()}
+\end{itemize}
 
 \section{Keyword Final} % OK
 Final viene usato per indicare qualcosa di costante. Il riferimento \texttt{this} è implicitamente final. \\
