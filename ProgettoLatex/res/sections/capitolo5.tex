@@ -98,7 +98,7 @@ Costruttori:
 \textbf{Nota bene}: la capacità non implica che venga creato un oggetto nullo! Quindi se cerco di ottenere un elemento con il \texttt{get(i)} viene lanciata l'eccezione \texttt{IndexOutOfBoundsException} se \textbf{i} non corrisponde ad un elemento inizializzato.
 
 \paragraph{LinkedList}
-Rappresenta una lista doppiamente linkata. Non è thread-safe. \\ Presenta le stesse operazioni di \texttt{ArrayList} e alcune operazioni in più:
+Rappresenta una lista doppiamente linkata. Non è thread-safe. Presenta le stesse operazioni di \texttt{ArrayList} e alcune operazioni in più:
 \begin{itemize}
 \item \texttt{offer} - aggiunge un elemento in coda;
 \item \texttt{peek} - ritorna il primo elemento della lista;
@@ -129,12 +129,12 @@ Insieme di coppie chiave-valore non ordinati. Non è thread-safe. Alcune operazi
 \end{itemize}
 Costruttori:
 \begin{itemize}
-\item \texttt{HashMap()} - mappa con capacità iniziale a 16 e fattore di carico a 0.75;
-\item \texttt{HashMap(int capacità)} - costruisce una lista vuota di con una certa capacità iniziale e fattore di carico 0.75;
-\item \texttt{HashMap(int capacità, float carico)} - costruisce una lista vuota di con una certa capacità iniziale e un certo carico;
+\item \texttt{HashMap()} - costruisce una mappa con capacità iniziale a 16 e fattore di carico a 0.75;
+\item \texttt{HashMap(int capacità)} - costruisce una mappa vuota di con una certa capacità iniziale e fattore di carico 0.75;
+\item \texttt{HashMap(int capacità, float carico)} - costruisce una mappa vuota di con una certa capacità iniziale e un certo carico;
 \item \texttt{HashMap(Map m)} - costruisce una mappa contenente gli elementi della collezione passata;
 \end{itemize}
-NOTA: MANCA UNA PARTE
+\textbf{Nota}: a volte può essere essere utile ridefinire \texttt{hashCode()} nel caso di utilizzo di chiavi custom.
 
 \paragraph{TreeMap}
 Insieme di coppie chiave-valore ordinati secondo la chiave tramite un albero rosso-nero. Non è thread-safe. 
@@ -143,12 +143,42 @@ Insieme di coppie chiave-valore ordinati secondo la chiave tramite un albero ros
 Collezione di elementi che non può contenere duplicati.
 
 \paragraph{HashSet}
-Implementa un Set sfruttando le caratteristiche di un HashMap.
-
+Implementa un Set sfruttando le caratteristiche di un HashMap. Non è thread-safe. Alcune operazioni:
+\begin{itemize}
+\item \texttt{add}
+\item \texttt{clear}
+\item \texttt{clone}
+\item \texttt{contains}
+\item \texttt{isEmpty}
+\item \texttt{size}
+\item \texttt{remove}
+\end{itemize}
+Costruttori:
+\begin{itemize}
+\item \texttt{HashSet()} - costruisce un insieme vuoto con capacità iniziale a 16 e fattore di carico a 0.75;
+\item \texttt{HashSet(int capacità)} - costruisce un insieme vuoto di con una certa capacità iniziale e fattore di carico 0.75;
+\item \texttt{HashSet(int capacità, float carico)} - costruisce un insieme vuoto di con una certa capacità iniziale e un certo carico;
+\item \texttt{HashSet(Collection c)} - costruisce un insieme contenente gli elementi della collezione passata;
+\end{itemize}
 
 \paragraph{TreeSet}
-Implementa un Set ordinato secondo l'ordine naturale degli elementi. Sfrutta l'albero rosso-nero. Non è thread-safe.
-
+Implementa un Set ordinato secondo l'ordine naturale degli elementi. Sfrutta l'albero rosso-nero. Non è thread-safe. Alcune operazioni:
+\begin{itemize}
+\item \texttt{add}
+\item \texttt{remove}
+\item \texttt{ceiling}
+\item \texttt{first}
+\item \texttt{higher}
+\item \texttt{last}
+\item \texttt{subSet}
+\end{itemize}
+Costruttori:
+\begin{itemize}
+\item \texttt{TreeSet()} - costruisce un insieme vuoto ad albero;
+\item \texttt{TreeSet(Comparator comp)} - costruisce un insieme vuoto di con una certa capacità iniziale e fattore di carico 0.75;
+\item \texttt{TreeSet(SortedSet s)} - costruisce un insieme vuoto con ordine ed elementi dell'insieme passato;
+\item \texttt{TreeSet(Collection c)} - costruisce un insieme ad albero contenente gli elementi della collezione passata;
+\end{itemize}
 
 \subsection{Classe Collections}
 \texttt{Collections} è una classe che ha solo metodi statici e generici per agire sulle collezioni. Alcuni metodi\footnote{Ndr: la segnatura dei seguenti metodi è stata semplificata; leggere la documentazione Java per sapere la segnatura completa.}:
