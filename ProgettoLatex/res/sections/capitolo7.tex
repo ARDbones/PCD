@@ -83,6 +83,7 @@ Ci sono dei thread che lavorano in background, detti demoni. Questi hanno un met
 \section{Il problema della condivisione dei dati}
 Due thread concorrenti possono accedere agli stessi dati; c'è bisogno di gestire gli accessi per non danneggiare i dati condivisi. Per ogni oggetto condiviso, vanno individuate le sezioni critiche e sincronizzate le entrate dei thread in queste sezioni in modo che in ogni istante un solo thread starà eseguendo le istruzioni della propria sezione critica.
 
+\subsection{Lock}
 Un metodo è quello dei \textbf{lock}, che indicano che l'oggetto sta venendo usato nella sezione critica.
 Le sezioni critiche vanno racchiuse nei blocchi \texttt{synchronized (exp) \{…\}}, dove \textbf{exp} è l'oggetto per cui il codice nel blocco è una sezione critica.
 Un thread che arriva al blocco richiede il lock:
@@ -91,10 +92,44 @@ Un thread che arriva al blocco richiede il lock:
 \item se non lo ottiene, viene sospeso e messo in coda finché non si libera
 \end{itemize}
 Se un thread viene interrotto e perde la CPU (NB: è diverso dall'interruzione per un'eccezione), mantiene il lock finché non termina l'esecuzione, bloccando tutti i thread che vorrebbero accedere al blocco synchronized dell'oggetto.
+Quando un thread rilascia un lock dopo un blocco synchronized, si instaura una relazione \textit{happens-before} tra il rilascio del lock e il tentativo di riacquisirlo successivamente. 
 
 Se un intero metodo rappresenta una sezione critica, si può usare synchronized nella dichiarazione del metodo, ma il marcatore non fa parte della segnatura e non viene ereditato. Le richieste di sincronizzazione fanno parte dell'implementazione, non dell'interfaccia di una classe, quindi una interfaccia non può avere metodi synchronized.
 
-I lock di Java sono rientranti, cioè un thread può acquisire i rilasciare più volte il lock su uno stesso oggetto.
+I lock di Java sono rientranti, cioè un thread può acquisire e rilasciare più volte il lock su uno stesso oggetto.
+
+Con Java 5 è stata introdotta l'interfaccia \texttt{Lock} e alcune classi che la implementano, tra cui \texttt{ReentrantLock}, che permette di controllare in maniera esplicita e manualmente le condizioni di blocco e sblocco della sezione critica. Alcuni metodi: 
+\begin{itemize}
+\item \texttt{void lock()}
+\item \texttt{void unlock()}
+\item \texttt{void tryLock()} 
+\end{itemize}
+L'attesa su un lock può essere organizzata in base a delle condizioni, in modo da creare code diverse. Si usa l'interfaccia \texttt{Condition}. Alcuni metodi: 
+\begin{itemize}
+\item \texttt{void await()}
+\item \texttt{void signal()}
+\item \texttt{void signalAll()} 
+\end{itemize}
+Il controllo manuale è molto pericoloso e può portare facilmente a deadlock.
+\subsection{Wait e Notify}
+Un'alternativa al synchronized è l'utilizzo di \texttt{wait()} che mette in attesa un thread finché un altro thread non lo riattiva tramite un \texttt{notify()}. 
+
+\subsection{Semafori}
+Si può controllare un insieme omogeneo di risorse tramite i semafori; sono simili ai lock, ma tengono un conteggio e non un semplice occupato/libero. Un semaforo è un oggetto della classe \texttt{Semaphore}. Il costruttore \texttt{Semaphore(int permits, boolean fair)} permette di indicare il numero di permessi e la politica di gestione: se è fair (quindi true), l'ordinamento dei thread è garantito secondo FIFO. Conviene usare un semaforo fair quando regola l'accesso ad un insieme di risorse; in casi diversi è più efficiente non fair. Metodi:
+\begin{itemize}
+\item \texttt{void acquire()} - acquisisce un permesso e viene decrementato il numero totale
+\item \texttt{void release()} - rilascia un permesso, incrementandone il valore
+\item \texttt{void tryAcquire()} - prova ad ottenere un permesso; ritorna subito false se non ha ottenuto il permesso ed è in grado di violare la fairness del semaforo
+\end{itemize}
+Un semaforo può essere rilasciato da un thread diverso da quello che lo ha acquisito (nei lock non si può).
+\paragraph{Eccezioni} I metodi di \texttt{Semaphore} possono lanciare:
+\begin{itemize}
+\item \texttt{InterruptedException} - se il thread viene interrotto durante l'attesa
+\item \texttt{IllegalArgumentException} - se il parametro è negativo
+\end{itemize}
+
+\section{Dati thread-safe}
+Per condividere dati tra più thread sono necessari dati thread-safe. 
 
 \section{Thread Pool e Executors}
 Come già detto, c'è una differenza tra l'attività logica da eseguire concorrentemente (Task -> oggetto Runnable) e il meccanismo che esegue l'attività concorrentemente (Thread). Di solito, prima di suddivide il lavoro in task, poi si pensa alla loro politica di esecuzione. \\
