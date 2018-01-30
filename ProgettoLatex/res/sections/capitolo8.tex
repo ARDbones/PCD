@@ -97,7 +97,11 @@ L'interfaccia \texttt{Stream} è stata introdotta da Java 8 in supporto alle ope
 \item \texttt{map()} - ritorna uno stream con gli elementi ai quali ho applicato la funzione passata [Intermedia]
 \item \texttt{distinct()} - ritorna uno steam con elementi distinti [Intermedia]
 \item \texttt{sorted()} - ritorna uno stream con gli elementi ordinati [Intermedia]
+\item \texttt{parallel()} - ritorna uno stream parallelo [Intermedia]
+\item \texttt{sequential()} - ritorna uno stream sequenziale [Intermedia]
+\item \texttt{limit()} - ritorna uno stream limitato nella lunghezza in base al valore passato [Intermedia]
 \item \texttt{forEach()} - compie un azione per ogni elemento dello stream [Terminale]
 \item \texttt{count()} - ritorna il numero di elementi dello stream [Terminale]
+\item \texttt{anyMatch()} - ritorna true se un qualsiasi elemento rende true il predicato; può non valutarli tutti [Terminale]
 \item \texttt{allMatch()} - ritorna true se tutti gli elementi rendono true il predicato [Terminale]
 \end{itemize}
