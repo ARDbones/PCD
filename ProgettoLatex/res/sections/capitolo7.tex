@@ -129,7 +129,29 @@ Un semaforo può essere rilasciato da un thread diverso da quello che lo ha acqu
 \end{itemize}
 
 \section{Dati thread-safe}
-Per condividere dati tra più thread sono necessari dati thread-safe. 
+Per condividere dati tra più thread sono necessari dati thread-safe. Se servono delle semplici variabili, per esempio per un contatore, si possono usare le \textbf{variabili atomiche}:
+\begin{itemize}
+\item \texttt{AtomicInteger}
+\item \texttt{AtomicLong}
+\item \texttt{AtomicReference}
+\item \texttt{AtomicIntegerArray}
+\item \texttt{AtomicLongArray}
+\item \texttt{AtomicReferenceArray}
+\end{itemize}
+In queste classi la modifica ai valori sono atomiche e thread-safe.
+
+Esiste la keyword \texttt{volatile} per indicare che un dato dovrà essere sempre letto dalla memoria e mai dalla cache. Il suo uso va fatto con molta attenzione.
+
+C'è la possibilità in opposizione alle variabili atomiche di definire variabili indipendenti per ciascun thread. Queste sono oggetti della classe \texttt{ThreadLocal}, per i quali esiste una copia differente e indipendente per ogni thread che attraversa la sua dichiarazione.
+
+\subsection{Collezioni concorrenti}
+Oltre alle variabili atomiche, esistono le collezioni ottimizzate per la concorrenza. Alcuni esempi:
+\begin{itemize}
+\item \texttt{ConcurrentMap}
+\item \texttt{ConcurrentHashMap}
+\item \texttt{BlockingQueue}
+\end{itemize}
+
 
 \section{Thread Pool e Executors}
 Come già detto, c'è una differenza tra l'attività logica da eseguire concorrentemente (Task -> oggetto Runnable) e il meccanismo che esegue l'attività concorrentemente (Thread). Di solito, prima di suddivide il lavoro in task, poi si pensa alla loro politica di esecuzione. \\
