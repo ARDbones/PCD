@@ -11,7 +11,7 @@ public interface Interfaccia<T> { }
 public <T> void f(T[] array) { }
 \end{lstlisting}
 
-Un metodo statico che utilizza un tipo parametrico deve essere un metodo generico o si ha un errore di compilazione. 
+Un metodo statico di una classe generica che utilizza un tipo parametrico deve essere un metodo generico o si ha un errore di compilazione. 
 \begin{lstlisting}
 public class Classe<T>{
 	public static <T> void m(T[] arg) { }
@@ -27,7 +27,7 @@ Se un generic viene esteso o implementato, deve essere indicato il tipo esplicit
 public static <T extends C> min(T[ ] arg){ }
 // dove C e' la classe/interfaccia base
 \end{lstlisting}
-Nell'esempio è sensato usare l'interfaccia \texttt{Comparable} al posto di C.
+Nell'esempio è sensato usare l'interfaccia \texttt{Comparable} al posto di C. \\
 Se si vuole che T sia sottotipo di più tipi, si usa \texttt{<T extends A \& ... \& C>}. Nell'elenco devono andare prima la classe, poi le interfacce.
 
 Un altro modo per porre dei vincoli e l'utilizzo di \textbf{wildcards}, cioè dei caratteri jolly che hanno un significato implicito.
@@ -55,21 +55,21 @@ class Agente extends Dipendente {...}
 ArrayList<Dirigente> a = new ArrayList<Dirigente>();
 ArrayList<Dipendente> b = a; // NON FUNZIONA
 Dipendente dip = new Agente();
-b.add(dip); 
+b.add(dip); // OK
 \end{lstlisting}
 Ad esempio non è possibile usare un \texttt{ArrayList<Double>} al posto di un \texttt{ArrayList<Object>}, anche se Double$\le$Object.
 
 \subsection{Type erasure}
 La JVM attua il \textit{type erasure}, ovvero per ogni generic sostituisce il tipo parametrico con il primo bound o con Object se è unbounded. In questo modo le verifiche avvengono a compile time. A causa del type erasure di Java non è possibile:
 \begin{itemize}
-\item costruire oggetti che sono istanze del tipo parametro \texttt{new T()}
-\item costruire un array del tipo parametro \texttt{new T[k]}
+\item costruire oggetti che sono istanze del tipo parametro - \texttt{new T()}
+\item costruire un array del tipo parametro - \texttt{new T[k]}
 \item usare il tipo di una classe generica per definire campi dati statici, metodi statici o classi
 \item fare overloading di metodi dove cambia solo il tipo parametrico
 \end{itemize}
 
 \section{Collezioni}
-Le collezioni in Java corrispondono ai contenitori, dove un oggetto rappresenta un insieme di oggetti. Mentre gli array in Java hanno una lunghezza fissa, un tipo Collection è un array dinamico di Object.
+Le collezioni in Java corrispondono ai contenitori, dove un oggetto rappresenta un insieme di oggetti. Mentre gli array in Java hanno una lunghezza fissa, un tipo \texttt{Collection} è un array dinamico di \texttt{Object}.
 
 Esistono delle apposite collezioni per la concorrenza introdotte da Java 7 che sono considerate \textit{thread-safe}.
 

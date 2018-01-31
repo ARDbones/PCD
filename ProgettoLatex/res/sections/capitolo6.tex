@@ -23,7 +23,7 @@ void m() throws Exc {
 Il codice che può sollevare eccezioni va in un blocco \texttt{try} e l'eccezione viene gestita dal primo \texttt{catch} di tipo compatibile. L'ordine delle clausole è da sottoclasse a superclasse, altrimenti la superclasse prende tutte le eccezioni. Se non si trova la \texttt{catch} adatta, l'eccezione viene rilanciata al metodo che ha invocato il metodo che ha lanciato l'eccezione; se non viene gestita, viene terminato il programma. Una \texttt{catch} non può catturare più eccezioni in relazione di tipo tra loro.
 \begin{lstlisting}
 catch(EccezioneBase B | EccezioneDerivata D){}
-\\ Il compilatore segna un errore
+// Il compilatore segna un errore
 \end{lstlisting}
 
 

@@ -4,7 +4,7 @@
 Ogni tipo è una classe, compresi quelli base (es: Integer per int). 
 Per comodità esistono i tipi primitivi non classe: int, long, double, float, boolean, char. I valori di questi non sono oggetti.
 
-Java è fortemente tipato, quindi un'espressione deve avere un valore compatibile, cioè stesso tipo o sottotipo secondo la relazione:
+Java è fortemente tipato, quindi un'espressione deve avere un valore compatibile, cioè stesso tipo o sottotipo della variabile a cui viene assegnata, secondo la relazione:
 \begin{verbatim}
 byte < short < int < long < float < double 
 \end{verbatim} 
@@ -76,8 +76,15 @@ L'unico modo per passare i parametri ai metodi è per valore, quindi i parametri
 \section{Overloading di metodi}
 Più metodi possono avere lo stesso nome, ma deve cambiare il numero e il tipo di parametri. Se cambia solo il tipo di ritorno non funziona.
 
-Il compilatore sceglie prima il metodo con i parametri dello stesso tipo, poi quello dove i parametri formali hanno il minimo supertipo (vedi relazione sopra) rispetto ai parametri attuali.
+Il compilatore sceglie prima il metodo con i parametri dello stesso tipo, poi quello dove i parametri formali hanno il minimo supertipo (cioè deve fare meno conversioni) rispetto ai parametri attuali.
 Se c'è ambiguità, non compila.
+
+\begin{lstlisting}
+void fun(double d){}
+void fun(float f){}
+
+fun(5); // invoca float (int < float < double)
+\end{lstlisting}
 
 \section{Riferimento this}
 This è un riferimento all'oggetto d'invocazione e si può usare solo sui metodi non statici. Di solito si usa per passare l'oggetto di
@@ -91,11 +98,10 @@ Ci sono 4 modificatori di accessibilità:
 \item campo/metodo marcato \textbf{protected} è accessibile dal pacchetto e dalle sottoclassi
 \item campo/metodo marcato \textbf{public} è accessibile da chiunque
 \end{itemize}
-
 Anche una classe può avere diverse accessibilità:
 \begin{itemize}
 \item public
-\item senza marcature -> package
+\item senza marcature $\rightarrow$ package
 \item protected e private solo se sono classi interne
 \end{itemize}
 
@@ -148,10 +154,10 @@ L'inizializzazione dei campi può quindi avvenire:
     stipendio=0;
 }
 \end{lstlisting}
- 
+Il blocco di inizializzazione, detto anche d'istanza, viene eseguito ogni volta che viene creato un oggetto della classe. Se ci sono più blocchi viene seguito l'ordine in cui sono dichiarati. I blocchi d'istanza vengono eseguiti prima del costruttore.
 
 \section{Campi e metodi statici}
-I campi statici sono condivisi tra gli oggetti della classe; c'è una sola copia in memoria. Sono utili per la comunicazione tra oggetti, per esempio per contare le istanze create.Si usa con il nome della classe: \texttt{C.s}.
+I campi statici sono condivisi tra gli oggetti della classe; c'è una sola copia in memoria. Sono utili per la comunicazione tra oggetti, per esempio per contare le istanze create. Si usa con il nome della classe: \texttt{C.s}.
 
 I metodi statici non hanno oggetto di invocazione e si usano con il nome della classe: \texttt{C.m()}.
 
@@ -162,20 +168,20 @@ Metodi e campi statici vengono creati e inizializzati al caricamento della class
 Java carica il bytecode di una classe al primo statement che usa la classe. Se viene solo dichiarato un riferimento, non viene caricata la classe.
 
 \section{Inizializzazione dei campi statici}
-I campi statici si possono inizializzare tramite il blocco di inizializzazione con lo static davanti e viene eseguito quando la classe viene caricata. Se una classe ha più blocchi, vengono eseguiti sequenzialmente.
+I campi statici si possono inizializzare tramite il blocco di inizializzazione con lo static davanti e viene eseguito quando la classe viene caricata (quindi una sola volta!). Se una classe ha più blocchi statici, vengono eseguiti sequenzialmente.
 
 \begin{lstlisting}
 public static int n = 3;
 static {
-	// codice che fa qualcosa alla variabile statica
+	// codice che fa qualcosa; potrebbe anche non modificare la variabile statica
 	n++;
 }
 \end{lstlisting}
 
 \section{Tempo di vita e inizializzazione delle variabili}
 \begin{itemize}
-\item Variabili locali di un metodo: la variabile deve essere inizializzata, altrimenti da errore; sono allocate nello stack quando dichiarate e deallocate a fine metodo; se è un riferimento, non viene deallocato l'oggetto puntato, a meno che non abbia più riferimenti che lo puntano. 
-\item Parametri formale: allocati/deallocati in memoria all'inizio/fine dell'esecuzione del metodo; inizializzati con i valori dei parametri attuali.
-\item Variabili di istanza (campi dati): vengono creati quando un oggetto viene costruito e esistono finché esiste un riferimento a quell'oggetto; inizializzate come indicato sopra. 
-\item Variabili di classe (statiche): le variabili statiche sono create al caricamento della classe e vengono deallocate a fine dell'esecuzione; inizializzate a zero, successivamente con il blocco di inizializzazione (se presente).
+\item \textbf{Variabili locali di un metodo}: la variabile deve essere inizializzata, altrimenti da errore; sono allocate nello stack quando dichiarate e deallocate a fine metodo; se è un riferimento, non viene deallocato l'oggetto puntato, a meno che non abbia più riferimenti che lo puntano. 
+\item \textbf{Parametri formale}: allocati/deallocati in memoria all'inizio/fine dell'esecuzione del metodo; inizializzati con i valori dei parametri attuali.
+\item \textbf{Variabili di istanza (campi dati)}: vengono creati quando un oggetto viene costruito e esistono finché esiste un riferimento a quell'oggetto; inizializzate come indicato sopra. 
+\item \textbf{Variabili di classe (statiche)}: le variabili statiche sono create al caricamento della classe e vengono deallocate a fine dell'esecuzione; inizializzate a zero, poi con il blocco di inizializzazione (se presente).
 \end{itemize}

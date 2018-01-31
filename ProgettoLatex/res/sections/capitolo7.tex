@@ -44,7 +44,7 @@ t.start(); // solo con questa invocazione viene attivato il thread
 \paragraph{Differenza tra i due} Un oggetto \texttt{Thread} rappresenta il meccanismo che esegue l'attività logica del thread, mentre un oggetto \texttt{Runnable} rappresenta l'attività logica in sé.
 Implementare \texttt{Runnable} è utile a causa del vincolo di ereditarietà singola, mentre estendere \texttt{Thread} è utile quando si usano altri metodi di \texttt{Thread}. Inoltre \texttt{Thread} permette di usare direttamente \texttt{this} per riferirsi al thread, mentre \texttt{Runnable} necessita il metodo statico \texttt{currentThread()}.
 
-I thread possono essere dichiarati senza riferimento se usati direttamente come oggetto di invocazione. Questi oggetti non sono preda del garbage collector, perché esiste sempre un riferimento implicito ad oggetti di tipo \texttt{Thread}.
+I thread possono essere dichiarati senza riferimento se usati direttamente come oggetto di invocazione. Questi oggetti non sono preda del garbage collector perché esiste sempre un riferimento implicito ad oggetti di tipo \texttt{Thread}.
 
 \texttt{Thread} possiede un costruttore ad un parametro di tipo stringa che permette di dare un nome ad un thread. Un nuovo thread è effettivamente attivato solo dopo l'invocazione di \texttt{start()}. \\
 \textbf{NB}: anche il main ha un suo thread logico, detto main thread. La terminazione del main thread non implica la terminazione dell'esecuzione del programma, che continua finché ci sono thread attivi.
@@ -154,7 +154,8 @@ Oltre alle variabili atomiche, esistono le collezioni ottimizzate per la concorr
 
 
 \section{Thread Pool e Executors}
-Come già detto, c'è una differenza tra l'attività logica da eseguire concorrentemente (Task -> oggetto Runnable) e il meccanismo che esegue l'attività concorrentemente (Thread). Di solito, prima di suddivide il lavoro in task, poi si pensa alla loro politica di esecuzione. \\
+Come già detto, c'è una differenza tra l'attività logica da eseguire concorrentemente (Task $\rightarrow$ oggetto Runnable) e il meccanismo che esegue l'attività concorrentemente (Thread). Di solito, prima di suddivide il lavoro in task, poi si pensa alla loro politica di esecuzione.
+
 Creare un nuovo thread può essere costoso, oltre ad essere difficile da gestire bene. La soluzione è cedere una parte del controllo al sistema tramite i Thread pool e gli \texttt{Executors}.
 
 I Thread pool contengono un insieme di thread pronti, ognuno con una propria coda di task, cioè di oggetti \texttt{Runnable}. Ogni thread guarda la propria coda ed invoca il metodo run per l'oggetto presente e alla fine dell'esecuzione invece di terminare verifica se ci sono altri oggetti in coda. Se la coda è vuota, il thread "ruba" (\textit{work stealing}) una task dalle altre code o si mette in attesa.

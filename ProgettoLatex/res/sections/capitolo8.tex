@@ -45,7 +45,6 @@ class OutputStream{
 	void flush()
 }
 \end{lstlisting}
-
 Alcuni gruppi di classi che estendono le precedenti:
 \begin{itemize}
 \item flussi \texttt{Filter}, che hanno un qualche filtro
@@ -61,7 +60,7 @@ L'accesso al file può essere sequenziale o diretto.
 \section{Serializzazione}
 I dati trasmessi in input/output a volte possono essere proprio degli oggetti. Con \texttt{ObjectInputStream e ObjectOutputStream} è possibile rappresentare flussi di oggetti. 
 
-Non tutti gli oggetti vanno bene: solo quelli che implementano l'interfaccia \texttt{Serializable}. L'interfaccia non ha metodi e serve solo a marcare che gli oggetti possono essere trasmessi tramite stream. Viene lanciata l'eccezione \texttt{(NotSerializableException} se si usa un oggetto che non implementa Serializable.
+Non tutti gli oggetti vanno bene: solo quelli che implementano l'interfaccia \texttt{Serializable}. L'interfaccia non ha metodi e serve solo a marcare che gli oggetti possono essere trasmessi tramite stream. Viene lanciata l'eccezione \texttt{NotSerializableException} se si usa un oggetto che non implementa Serializable.
 
 La serializzazione è il processo che trasforma un oggetto in un'opportuna sequenza di byte (\texttt{writeObject(obj)}) e viceversa (\texttt{readObject()} - deserializzazione). La deserializzazione ritorna un oggetto di tipo \texttt{Object}, quindi sta al programmatore fare un cast corretto in base al tipo adatto. 
 
@@ -81,7 +80,6 @@ Regole generiche:
 \item il tipo dei parametri può essere implicito o esplicito
 \item le parentesi del corpo possono venire omesse se è un solo statement
 \end{itemize}
-
 Le espressioni Lambda vengono tradotte dal compilatore in funzioni di \textbf{interfacce funzionali}. Le interfacce funzionali contengono un singolo metodo astratto \textit{il quale è la traduzione dell'espressione} (incerto). Esistono delle interfacce già definite come:
 \begin{itemize}
 \item \texttt{Function} - accetta un argomento di tipo T e ritorna un tipo R

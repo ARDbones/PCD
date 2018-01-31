@@ -4,7 +4,7 @@
 Una classe può avere solo una superclasse. Una derivata è indicata da \texttt{Class C extends nomeClasseBase{}}. 
 
 \section{Tipo Object} % OK
-Object è la classe base implicita di ogni classe (non serve l'extends). Le classi ereditano i suoi metodi, tipo:
+\texttt{Object} è la classe base implicita di ogni classe (non serve l'extends). Le classi ereditano i suoi metodi, tipo:
 \begin{itemize}
 \item \texttt{boolean equals(Object obj)} che verifica se due riferimenti puntano allo stesso oggetto; un riferimento è l'oggetto di invocazione, l'altro è parametro passato. 
 \item \texttt{String toString()} ritorna l'oggetto di invocazione in formato stringa; la versione di default restituisce il nome della classe e l'indirizzo del riferimento (quindi meglio ridefinirlo per classe).
@@ -43,16 +43,15 @@ private & Si & No & No & No \\
 
 \section{Costruttori nelle sottoclassi} % OK
 Le derivate ereditano i campi della superclasse, ma non possono inizializzarli. Nei costruttori devono richiamare il costruttore della base tramite la keyword \texttt{super()}.
-
 Comportamento del costruttore di una derivata:
 \begin{enumerate}
 \item viene allocata la memoria per tutti i campi, sia propri che ereditati
 \item tutti i campi vengono inizializzati a zero
 \item viene richiamato il costruttore della superclasse diretta; è un passo ricorsivo e si risale fino a Object
-\item vengono eseguite le inizializzazioni esplicite dei campi di D
-\item corpo del costruttore
+\item vengono eseguite le inizializzazioni esplicite dei campi della derivata
+\item esegue il corpo del costruttore
 \end{enumerate}
-Se \texttt{super} non è invocato, il compilatore inserisce una chiamata implicita al costruttore di default della base con \texttt{super()}; se quello di default non è disponibile, da errore.
+Se \texttt{super} non è invocato, il compilatore inserisce una chiamata implicita al costruttore di default della base con \texttt{super()}; se quello di default non è disponibile, dà errore.
 
 
 \section{Polimorfismo} % OK
@@ -67,7 +66,7 @@ Se \texttt{super} non è invocato, il compilatore inserisce una chiamata implici
 \item T2 è Object
 \end{itemize}
 
-Tipo statico di un riferimento TS(ref) è il tipo con cui è stato dichiarato; tipo dinamico del riferimento TD(ref) è il tipo effettivo dell'oggetto a cui si riferisce. Vale sempre TD$\le$TS.
+Il tipo statico di un riferimento TS(ref) è il tipo con cui è stato dichiarato; il tipo dinamico del riferimento TD(ref) è il tipo effettivo dell'oggetto a cui si riferisce. Vale sempre TD$\le$TS.
 
 In Java non c'è distinzione tra ridefinizione e overriding. Tutti i metodi sono implicitamente virtuali se presenti in più classi. Ma un metodo ridefinito:
 \begin{itemize}
@@ -75,7 +74,7 @@ In Java non c'è distinzione tra ridefinizione e overriding. Tutti i metodi sono
 \item non può diventare meno accessibile del metodo originale
 \item non può sollevare più eccezioni del metodo originale
 \end{itemize}
-\textbf{Binding (o dispatching)}: staticamente il compilatore controlla se esiste una definizione del metodo usato, dinamicamente viene scelta la ridefinizione più specifica rispetto al tipo dinamico (quindi con meno conversioni).
+\textbf{Binding (o dispatching)}: staticamente il compilatore controlla se esiste una definizione del metodo usato nella classe del tipo statico, dinamicamente viene scelta la ridefinizione più specifica rispetto al tipo dinamico (quindi con meno conversioni).
 
 Per i metodi statici e i campi dati il dispatching è sempre statico. Anche per i metodi privati (perché non possono essere ridefiniti) e quando viene invocato un metodo della superclasse con la keyword \texttt{super}. \texttt{Super} in modo simile al \texttt{this} si riferisce all'oggetto corrente ma con il tipo della superclasse. Quindi un \texttt{super.m()} invoca sempre il metodo della superclasse.
 
@@ -85,10 +84,10 @@ L'overloading dei metodi \textbf{non} nasconde tutti i metodi della base, ma sol
 Le conversioni sono possibili solo se un tipo è minore dell'altro. Se quello di partenza è più piccolo si chiama upcast, viceversa downcast.
 L'upcasting è sempre sicuro perché rispecchia il principio di sostituzione.
 
-Il downcasting si usa quando si ha la necessità di usare metodi specifici del tipo dinamico (il \textit{dynamic\_cast} di C++); viene fatto esplicitamente con \texttt{(tipoTarget)nomeVariabile}. Questa operazione ritorna un riferimento con lo stesso valore ma tipo statico diverso, ma il riferimento originale ha ancora lo stesso tipo statico.
+Il downcasting si usa quando si ha la necessità di usare metodi specifici del tipo dinamico (il \textit{dynamic\_cast} di C++); viene fatto esplicitamente con \texttt{(tipoTarget)nomeVariabile}. Questa operazione ritorna un riferimento con lo stesso valore ma tipo statico diverso (cioè del tipo target), ma il riferimento originale ha ancora lo stesso tipo statico.
 \begin{lstlisting}
 T1 ref=new T2();
-T2 nuovoRef=(T1)ref;
+T2 nuovoRef=(T2)ref;
 // TS(ref)=T1, TS(nuovoRef)=T2, TD(entrambi)=T2.
 \end{lstlisting}
 La conversione T(ref):
@@ -112,18 +111,17 @@ Altri metodi:
 \end{itemize}
 
 \section{Keyword Final} % OK
-Final viene usato per indicare qualcosa di costante. Il riferimento \texttt{this} è implicitamente final. \\
-NB: non esistono oggetti costanti.
+\texttt{Final} viene usato per indicare qualcosa di costante. Il riferimento \texttt{this} è implicitamente \texttt{final} (NB: non esistono oggetti costanti).
 
-Un campo dati marcato final è costante: non si può modificare il valore. Se è  statico e final deve essere inizializzato esplicitamente, altrimenti è errore; se è solo final, deve essere inizializzato esplicitamente o con il costruttore (l'inizializzazione automatica a zero non basta).
+Un campo dati di tipo primitivo marcato \texttt{final} è costante: non si può modificare il valore. Se è  statico e \texttt{final} deve essere inizializzato esplicitamente, altrimenti è errore; se è solo \texttt{final}, deve essere inizializzato esplicitamente o con il costruttore (l'inizializzazione automatica a zero non basta).
 
-Un riferimento marcato final si riferisce solo ad uno oggetto fisso, ma l'oggetto può essere modificato. Di solito non si usano campi dati riferimenti final.
+Un riferimento marcato \texttt{final} si riferisce solo ad uno oggetto fisso, ma l'oggetto può essere modificato. Di solito non si usano campi dati riferimenti \texttt{final}.
 
-Gli argomenti di un metodo possono essere marcati final: non si può modificare l'argomento; se è un riferimento, si può solo modificare l'oggetto.
+Gli argomenti di un metodo possono essere marcati \texttt{final}: non si può modificare l'argomento; se è un riferimento, si può solo modificare l'oggetto.
 
-Un metodo marcato final non può essere ridefinito nelle sottoclassi (usato per motivi di sicurezza o efficienza). Un metodo privato è già implicitamente final (ma se viene ridefinito, non è segnato errore).
+Un metodo marcato \texttt{final} non può essere ridefinito nelle sottoclassi (usato per motivi di sicurezza o efficienza). Un metodo privato è già implicitamente \texttt{final} (ma se viene ridefinito, non è segnato errore).
 
-Una classe marcata final non può avere derivate.
+Una classe marcata \texttt{final} non può avere derivate.
 
 \section{Suggerimenti per la progettazione di classi} % OK
 \begin{itemize}
