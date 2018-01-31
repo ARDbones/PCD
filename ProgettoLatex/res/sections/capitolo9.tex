@@ -34,5 +34,13 @@ Con il metodo \texttt{accept()}, il ServerSocket accetta una richiesta di connes
 La programmazione distribuita tramite socket è di basso livello.
 
 \section{Datagram}
-Un'alternativa alla comunicazione tramite socket è quella dei Datagram. Questo protocollo manda pacchetti di informazioni verso una o più destinazioni, senza garanzia di ricezione o di ordinamento in arrivo. La classe da utilizzare per ricevere i pacchetti è \texttt{DatagramPacket}; la classe è \texttt{final}, quindi non si può derivare. 
+Un'alternativa alla comunicazione tramite socket è quella dei Datagram. Questo protocollo manda pacchetti di informazioni verso una o più destinazioni, senza garanzia di ricezione o di ordinamento in arrivo. 
 
+La classe da utilizzare per ricevere o inviare i pacchetti è \texttt{DatagramSocket}. Non c'è distinzione di classe per la ricezione o l'invio. Un DatagramSocket si può connettere con il metodo \texttt{connect()} ad un indirizzo, ma in questo modo i pacchetti vengono spediti o ricevuti solo verso/da quell'indirizzo. Con il metodo \texttt{send()} è possibile inviare un pacchetto rappresentato da un oggetto di \texttt{DatagramPacket}, mentre con \texttt{receive()} si riceve un pacchetto. La classe \texttt{DatagramPacket} è \texttt{final}, quindi non si può estendere. Infine il DatagramSocket va chiuso con il metodo \texttt{close()}.
+
+\section{URL}
+Esiste inoltre la possibilità di interagire direttamente con risorse web tramite la classe \texttt{final URL e URLConnection}. [...]
+
+\section{Channel}
+
+\section{Modello RMI}
