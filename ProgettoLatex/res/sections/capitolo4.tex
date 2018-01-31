@@ -16,7 +16,7 @@ Di solito le classi astratte si usano per l'\textbf{ereditarietà di implementaz
 Le interfacce si usano per l'\textbf{ereditarietà di tipo}. Le interfacce definiscono funzionalità su un tipo senza indicare come è implementato quel tipo. Si dichiara con la keyword \texttt{interface Nome\{…\}} e ha regole specifiche:
 \begin{itemize}
 \item si può dichiarare solo campi marcati public static e final, e metodi astratti pubblici (abstract è implicito)
-\item non può avere metodi statici
+\item non può avere metodi statici (da Java 8 è possibile)
 \item non sono istanziabili, neanche come sottooggetti, quindi non hanno il costruttore
 \item può avere accessibilità public o package
 \end{itemize}
@@ -35,7 +35,7 @@ Le interfacce possono estendersi tra loro, formando gerarchie; è possibile fare
 \end{itemize}
 Le conversioni cambiano leggermente. Se un riferimento ref ha come TS un'interfaccia, è sempre possibile convertire esplicitamente ref a qualsiasi classe, senza dare errori a compile time. Può però dare ClassCastException dinamicamente se TD(ref) non è $\le$T.
 
-Le interfacce hanno un grosso problema: non è possibile aggiungere metodi e funzionalità successivamente perché invalidano tutte le classi che hanno implementato l'interfaccia. Da Java 8 esistono i metodi di default (\textbf{defender methods} \footnote{\url{https://dzone.com/articles/introduction-default-methods}}) che servono a risolvere questo problema. Questi metodi hanno un'implementazione di default della funzione così da permettere di far evolvere un'interfaccia senza invalidare le classi che l'hanno implementata. Se una classe eredita due implemetazione del metodo di default, verrà scelta la scelta quella della classe concreta più specifica.
+Le interfacce hanno un grosso problema: non è possibile aggiungere metodi e funzionalità successivamente perché invalidano tutte le classi che hanno implementato l'interfaccia. Da Java 8 esistono i metodi di default (\textbf{defender methods} \footnote{\url{https://dzone.com/articles/introduction-default-methods}}) che servono a risolvere questo problema. Questi metodi hanno un'implementazione di default della funzione così da permettere di far evolvere un'interfaccia senza invalidare le classi che l'hanno implementata. Se una classe eredita due implemetazioni del metodo di default, verrà scelta la scelta quella della classe concreta più specifica.
 
 Da Java 8 è possibile creare metodi statici in un'interfaccia, ma non possono essere ridefiniti dai sottotipi (vanno definiti nella prima dichiarazione).
 
