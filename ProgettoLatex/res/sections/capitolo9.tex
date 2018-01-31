@@ -39,8 +39,26 @@ Un'alternativa alla comunicazione tramite socket è quella dei Datagram. Questo 
 La classe da utilizzare per ricevere o inviare i pacchetti è \texttt{DatagramSocket}. Non c'è distinzione di classe per la ricezione o l'invio. Un DatagramSocket si può connettere con il metodo \texttt{connect()} ad un indirizzo, ma in questo modo i pacchetti vengono spediti o ricevuti solo verso/da quell'indirizzo. Con il metodo \texttt{send()} è possibile inviare un pacchetto rappresentato da un oggetto di \texttt{DatagramPacket}, mentre con \texttt{receive()} si riceve un pacchetto. La classe \texttt{DatagramPacket} è \texttt{final}, quindi non si può estendere. Infine il DatagramSocket va chiuso con il metodo \texttt{close()}.
 
 \section{URL}
-Esiste inoltre la possibilità di interagire direttamente con risorse web tramite la classe \texttt{final URL e URLConnection}. [...]
+Esiste inoltre la possibilità di interagire direttamente con risorse web tramite la classe \texttt{final URL e URLConnection}. [...]\footnote{Ndr: non verrà approfondito.}
 
 \section{Channel}
+L'interfaccia \texttt{Channel} rappresenta un canale di I/O aperto o chiuso. L'interfaccia \texttt{NetworkChannel} invece è un Channel per un socket, cioè rappresenta una comunicazione su una rete. 
+La classe \texttt{AsynchronousServerSocketChannel} è un canale asincrono basato su di una server socket. [...]\footnote{Ndr: non verrà approfondito.}
 
 \section{Modello RMI}
+Il RPC (Remote Procedure Call) è un sistema per chiamare procedure di un'altra macchina rendendo la chiamata più simile possibile ad una chiamata locale. L'adattamento locale/remoto viene implementato da un componente detto \textbf{stub}. Questo meccanismo viene ripreso nei linguaggi orientati agli oggetti e prende il nome di RMI (Remote Method Invocation). Una chiamata RMI è composta dai seguenti passi:
+\begin{enumerate}
+\item il client chiama lo stub locale
+\item lo stub prepara i parametri in un messaggio
+\item lo stub invia il messaggio e il client viene bloccato
+\item il server riceve il messaggio
+\item il server controlla il messaggio e cerca l'oggetto chiamato
+\item il server recupera i parametri e chiama il metodo destinatario
+\item l'oggetto esegue il metodo e ritorna il risultato
+\item il server prepara il risultato in un messaggio
+\item il server invia il messaggio allo stub
+\item lo stub riceve il messaggio di ritorno
+\item lo stub recupera il risultato dal messaggio
+\item lo stub ritorna al client il risultato
+\end{enumerate}
+Con l'evolvere della tecnologia, la strategia RMI viene usato poco e principalmente in ambienti piccoli e controllati.
