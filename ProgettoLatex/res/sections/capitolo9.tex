@@ -6,3 +6,33 @@ La programmazione distribuita entra in gioco quando si devono gestire processi s
 \item Fallimenti indipendenti tra loro
 \end{itemize}
 L'unica risorsa che condividono le macchine è la rete, attraverso la quale si scambiano messaggi e dati. 
+
+\section{Socket TCP}
+Due programmi possono comunicare attraverso gli stream associati ad una connessione di rete. Un tipo di comunicazione possibile è tramite i \textbf{socket TCP}. 
+
+Ogni servizio fornito da un server è identificato da una porta logica; per gestire la comunicazione tra più client verso una stessa porta, viene usato un socket per ogni client. 
+
+Il protocollo di comunicazione client/server è il seguente:
+\begin{enumerate}
+\item il server si mette in ascolto in attesa di richieste da parte di un client
+\item un client richiede un servizio
+\begin{itemize}
+\item il client crea un socket per comunicare con il server utilizzando l'indirizzo dell'host del server e la porta del servizio richiesto
+\item il server crea un socket per la comunicazione con il client richiedente
+\end{itemize}
+\item i due socket alle estremità vengono associati a degli stream per la comunicazione
+\item una volta terminata la comunicazione, vengono chiusi i socket e la connessione 
+\end{enumerate}
+In particolare, la classe base è \texttt{Socket}, da cui deriva \texttt{ServerSocket} per la creazione dei socket del server. Il \texttt{ServerSocket} viene costruito passando come parametro il numero della porta.
+
+La classe \texttt{InetServer} ha gli oggetti che rappresentano gli indirizzi IP. Questa classe è necessaria per la creazione dei socket da parte del client tramite il costruttore\footnote{Ndr: ovviamente ci sono anche costruttori con più parametri, sia per Socket, che per ServerSocket.}:
+\begin{lstlisting}
+public Socket(InetAddress address, int port) throws IOException
+\end{lstlisting}
+Con il metodo \texttt{accept()}, il ServerSocket accetta una richiesta di connessione e ritorna il relativo socket del client. Una volta connessi, è possibile ottenere gli stream collegati con i metodi \texttt{getInputStream()} e \texttt{getOutputStream()}. Questi stream sono thread-safe, ma un solo thread alla volta può scriverci e/o leggerci. Infine con il metodo \texttt{close()} viene chiuso il socket (di solito solo quello del client dato che il ServerSocket deve rimanere in attesa di altre richieste). 
+
+La programmazione distribuita tramite socket è di basso livello.
+
+\section{Datagram}
+Un'alternativa alla comunicazione tramite socket è quella dei Datagram. Questo protocollo manda pacchetti di informazioni verso una o più destinazioni, senza garanzia di ricezione o di ordinamento in arrivo. La classe da utilizzare per ricevere i pacchetti è \texttt{DatagramPacket}; la classe è \texttt{final}, quindi non si può derivare. 
+
