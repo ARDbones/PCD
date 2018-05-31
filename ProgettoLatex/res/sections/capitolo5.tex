@@ -65,7 +65,8 @@ La JVM attua il \textit{type erasure}, ovvero per ogni generic sostituisce il ti
 \item costruire oggetti che sono istanze del tipo parametro - \texttt{new T()}
 \item costruire un array del tipo parametro - \texttt{new T[k]}
 \item usare il tipo di una classe generica per definire campi dati statici, metodi statici o classi
-\item fare overloading di metodi dove cambia solo il tipo parametrico
+\item fare overloading di metodi dove cambia solo il tipo parametrico, in quanto la \textit{type erasure} fa sì che i metodi abbiano la stessa signature
+\item l'uso dell’operatore \texttt{instanceof (A instanceof T)}
 \end{itemize}
 
 \section{Collezioni}

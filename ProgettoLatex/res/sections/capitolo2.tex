@@ -180,7 +180,7 @@ static {
 
 \section{Tempo di vita e inizializzazione delle variabili}
 \begin{itemize}
-\item \textbf{Variabili locali di un metodo}: la variabile deve essere inizializzata, altrimenti da errore; sono allocate nello stack quando dichiarate e deallocate a fine metodo; se è un riferimento, non viene deallocato l'oggetto puntato, a meno che non abbia più riferimenti che lo puntano. 
+\item \textbf{Variabili locali di un metodo}: la variabile deve essere inizializzata, altrimenti dà errore; sono allocate nello stack quando dichiarate e deallocate a fine metodo; se è un riferimento, non viene deallocato l'oggetto puntato, a meno che non abbia più riferimenti che lo puntano. 
 \item \textbf{Parametri formale}: allocati/deallocati in memoria all'inizio/fine dell'esecuzione del metodo; inizializzati con i valori dei parametri attuali.
 \item \textbf{Variabili di istanza (campi dati)}: vengono creati quando un oggetto viene costruito e esistono finché esiste un riferimento a quell'oggetto; inizializzate come indicato sopra. 
 \item \textbf{Variabili di classe (statiche)}: le variabili statiche sono create al caricamento della classe e vengono deallocate a fine dell'esecuzione; inizializzate a zero, poi con il blocco di inizializzazione (se presente).

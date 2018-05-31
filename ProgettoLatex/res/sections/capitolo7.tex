@@ -42,7 +42,7 @@ t.start(); // solo con questa invocazione viene attivato il thread
 
 \end{lstlisting}
 \paragraph{Differenza tra i due} Un oggetto \texttt{Thread} rappresenta il meccanismo che esegue l'attività logica del thread, mentre un oggetto \texttt{Runnable} rappresenta l'attività logica in sé.
-Implementare \texttt{Runnable} è utile a causa del vincolo di ereditarietà singola, mentre estendere \texttt{Thread} è utile quando si usano altri metodi di \texttt{Thread}. Inoltre \texttt{Thread} permette di usare direttamente \texttt{this} per riferirsi al thread, mentre \texttt{Runnable} necessita il metodo statico \texttt{currentThread()}.
+Implementare \texttt{Runnable} è utile a causa del vincolo di ereditarietà singola, mentre estendere \texttt{Thread} è utile quando si usano altri metodi di \texttt{Thread}. Inoltre \texttt{Thread} permette di usare direttamente \texttt{this} per riferirsi al thread, mentre \texttt{Runnable} necessita il metodo statico \texttt{Thread.currentThread()}.
 
 I thread possono essere dichiarati senza riferimento se usati direttamente come oggetto di invocazione. Questi oggetti non sono preda del garbage collector perché esiste sempre un riferimento implicito ad oggetti di tipo \texttt{Thread}.
 
@@ -92,11 +92,14 @@ Un thread che arriva al blocco richiede il lock:
 \item se non lo ottiene, viene sospeso e messo in coda finché non si libera
 \end{itemize}
 Se un thread viene interrotto e perde la CPU (NB: è diverso dall'interruzione per un'eccezione), mantiene il lock finché non termina l'esecuzione, bloccando tutti i thread che vorrebbero accedere al blocco synchronized dell'oggetto.
-Quando un thread rilascia un lock dopo un blocco synchronized, si instaura una relazione \textit{happens-before} tra il rilascio del lock e il tentativo di riacquisirlo successivamente. 
+
+Quando un thread rilascia un lock dopo un blocco synchronized, si instaura una relazione \textit{happens-before} tra il rilascio del lock e il tentativo di riacquisirlo successivamente. Una relazione di happens-before \`e una garanzia forte fornita dal compilatore riguardo l'ordinamento dell'esecuzione delle istruzioni espresse dal codice.
+
+Da Wikipedia: \textit{"In computer science, the happened-before relation is a relation between the result of two events, such that if one event should happen before another event, the result must reflect that, even if those events are in reality executed out of order (usually to optimize program flow)."}
 
 Se un intero metodo rappresenta una sezione critica, si può usare synchronized nella dichiarazione del metodo, ma il marcatore non fa parte della segnatura e non viene ereditato. Le richieste di sincronizzazione fanno parte dell'implementazione, non dell'interfaccia di una classe, quindi una interfaccia non può avere metodi synchronized.
 
-I lock di Java sono rientranti, cioè un thread può acquisire e rilasciare più volte il lock su uno stesso oggetto.
+I lock di Java sono rientranti, cioè un thread può acquisire e rilasciare più volte il lock su uno stesso oggetto senza temere di finire in deadlock con se stesso.
 
 Con Java 5 è stata introdotta l'interfaccia \texttt{Lock} e alcune classi che la implementano, tra cui \texttt{ReentrantLock}, che permette di controllare in maniera esplicita e manualmente le condizioni di blocco e sblocco della sezione critica. Alcuni metodi: 
 \begin{itemize}
@@ -115,12 +118,17 @@ Il controllo manuale è molto pericoloso e può portare facilmente a deadlock.
 Un'alternativa al synchronized è l'utilizzo di \texttt{wait()} che mette in attesa un thread finché un altro thread non lo riattiva tramite un \texttt{notify()}. 
 
 \subsection{Semafori}
-Si può controllare un insieme omogeneo di risorse tramite i semafori; sono simili ai lock, ma tengono un conteggio e non un semplice occupato/libero. Un semaforo è un oggetto della classe \texttt{Semaphore}. Il costruttore \texttt{Semaphore(int permits, boolean fair)} permette di indicare il numero di permessi e la politica di gestione: se è fair (quindi true), l'ordinamento dei thread è garantito secondo FIFO. Conviene usare un semaforo fair quando regola l'accesso ad un insieme di risorse; in casi diversi è più efficiente non fair. Metodi:
+Si può controllare un insieme omogeneo di risorse tramite i semafori; sono simili ai lock, ma tengono un conteggio e non un semplice occupato/libero. Un semaforo è un oggetto della classe \texttt{Semaphore}. Il costruttore \texttt{Semaphore(int permits, boolean fair)} permette di indicare il numero di permessi e la politica di gestione: se è fair (quindi true), l'ordinamento dei thread è garantito secondo FIFO. Conviene usare un semaforo fair quando regola l'accesso ad un insieme di risorse; in casi diversi è più efficiente non fair.
+
+Il valore iniziale del semaforo non \`e un limite: può essere superato e pu\`o essere anche negativo inizialmente. Mantenere la coerenza semantica sta all'utilizzatore.
+
+Metodi:
 \begin{itemize}
 \item \texttt{void acquire()} - acquisisce un permesso e viene decrementato il numero totale
 \item \texttt{void release()} - rilascia un permesso, incrementandone il valore
 \item \texttt{void tryAcquire()} - prova ad ottenere un permesso; ritorna subito false se non ha ottenuto il permesso ed è in grado di violare la fairness del semaforo
 \end{itemize}
+
 Un semaforo può essere rilasciato da un thread diverso da quello che lo ha acquisito (nei lock non si può).
 \paragraph{Eccezioni} I metodi di \texttt{Semaphore} possono lanciare:
 \begin{itemize}
@@ -138,23 +146,40 @@ Per condividere dati tra più thread sono necessari dati thread-safe. Se servono
 \item \texttt{AtomicLongArray}
 \item \texttt{AtomicReferenceArray}
 \end{itemize}
-In queste classi la modifica ai valori sono atomiche e thread-safe.
+In queste classi la modifica ai valori è atomica e thread-safe senza bloccare il thread.
 
-Esiste la keyword \texttt{volatile} per indicare che un dato dovrà essere sempre letto dalla memoria e mai dalla cache. Il suo uso va fatto con molta attenzione.
+\subsection{Volatile}
 
-C'è la possibilità in opposizione alle variabili atomiche di definire variabili indipendenti per ciascun thread. Queste sono oggetti della classe \texttt{ThreadLocal}, per i quali esiste una copia differente e indipendente per ogni thread che attraversa la sua dichiarazione.
+Esiste la keyword \texttt{volatile} per indicare che un dato dovrà essere sempre letto dalla memoria e mai dalla cache. Il suo uso va fatto con molta attenzione. In un'architettura hardware ormai comune, pi\`u CPU colloquiano con la stessa memoria principale. Ognuna, ha una cache locale per velocizzare l'esecuzione del codice e l'interazione con i dati. Questo significa per\`o che thread diversi che sono stati smistati su CPU diverse vedono valori differenti, provenienti dalla cache, della stessa variabile. Una variabile dichiarata "volatile" viene sempre letta dalla memoria principale in modo da garantire la visibilit\`a dell'ultima scrittura.
+
+Tuttavia la garanzia fornita da "volatile" è utile alla correttezza del programma solo se
+nessun thread scrive nella variabile "volatile" un valore dipendente dal valore che ha appena letto dalla stessa variabile
+
+\subsection{ThreadLocal}
+
+C'è la possibilità in opposizione alle variabili atomiche di definire variabili indipendenti per ciascun thread. Queste sono oggetti della classe \texttt{ThreadLocal}, per i quali esiste una copia differente e indipendente per ogni thread che attraversa la sua dichiarazione. Si può immaginare che salvi le variabili in una mappa, dove la chiave è l'id del thread.
+
+\begin{lstlisting}
+ThreadLocal<Integer> threadLocalValue = new ThreadLocal<Integer>();    
+threadLocalValue.set(1);
+Integer result = threadLocalValue.get();
+
+// Oppure
+ThreadLocal<Integer> threadLocal = ThreadLocal.withInitial(() -> 1);
+threadLocal.remove();
+\end{lstlisting}
 
 \subsection{Collezioni concorrenti}
 Oltre alle variabili atomiche, esistono le collezioni ottimizzate per la concorrenza. Alcuni esempi:
 \begin{itemize}
-\item \texttt{ConcurrentMap}
-\item \texttt{ConcurrentHashMap}
-\item \texttt{BlockingQueue}
+\item \texttt{ConcurrentMap}: aggiunge a Map garanzie di atomicit\`a ed ordinamento delle operazioni
+\item \texttt{ConcurrentHashMap}: analogo al primo ed offre metodi come \texttt{reduce} e \texttt{foreach} che possono operare su tutte le chiavi suddividendo autonomamente il lavoro in più thread
+\item \texttt{BlockingQueue}: aggiunge metodi con cui è possibile scegliere la semantica dell'operazione di accodamento e prelievo. Dalla documentazione API: \textit{"one throws an exception, the second returns a special value (either null or false, depending on the operation), the third blocks the current thread indefinitely until the operation can succeed, and the fourth blocks for only a given maximum time limit before giving up"}
 \end{itemize}
 
 
 \section{Thread Pool e Executors}
-Come già detto, c'è una differenza tra l'attività logica da eseguire concorrentemente (Task $\rightarrow$ oggetto Runnable) e il meccanismo che esegue l'attività concorrentemente (Thread). Di solito, prima di suddivide il lavoro in task, poi si pensa alla loro politica di esecuzione.
+Come già detto, c'è una differenza tra l'attività logica da eseguire concorrentemente (Task $\rightarrow$ oggetto Runnable) e il meccanismo che esegue l'attività concorrentemente (Thread). Di solito, prima si suddivide il lavoro in task, poi si pensa alla loro politica di esecuzione.
 
 Creare un nuovo thread può essere costoso, oltre ad essere difficile da gestire bene. La soluzione è cedere una parte del controllo al sistema tramite i Thread pool e gli \texttt{Executors}.
 
@@ -174,6 +199,6 @@ Tramite il metodo \texttt{execute(Runnable r)} viene gestita l'esecuzione delle 
 L'interfaccia \texttt{Callable<T>} permette di definire delle task che producono un risultato di tipo T. Si deve implementare l'interfaccia contenente il solo metodo \texttt{T call()}.
 
 L'uso delle Callables è strettamente legato a quello dell'interfaccia \texttt{Future}. Infatti per eseguire una Callable è necessario utilizzare un ExecutorService, il quale ha un metodo \texttt{submit()} per gestire la Callable e ritorna un oggetto Future. Future è un contenitore che viene riempito con un valore T il cui calcolo sta avvenendo in parallelo. Una \texttt{get()} sull'oggetto Future ritorna il contenuto se è stato calcolato, altrimenti rimane in attesa fino al termine del calcolo. \\
-Il metodo \texttt{invokeAny()} ritorna il risultato di una task che è terminata con successo; \texttt{invokeAll()} li ritorna tutti, \texttt{invokeFirst()} solo il primo.
+Il metodo \texttt{invokeAny()} dell'\texttt{ExecutorService} ritorna il risultato di una task che è terminata con successo; \texttt{invokeAll()} li ritorna tutti, \texttt{invokeFirst()} solo il primo.
 
 Un ExecutorService rimane sempre in attesa di task, quindi una volta finito va terminato con il metodo \texttt{shutdown()}.
