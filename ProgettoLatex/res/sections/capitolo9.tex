@@ -25,7 +25,7 @@ Il protocollo di comunicazione client/server è il seguente:
 \end{enumerate}
 In particolare, la classe base è \texttt{Socket}, da cui deriva \texttt{ServerSocket} per la creazione dei socket del server. Il \texttt{ServerSocket} viene costruito passando come parametro il numero della porta.
 
-La classe \texttt{InetServer} ha gli oggetti che rappresentano gli indirizzi IP. Questa classe è necessaria per la creazione dei socket da parte del client tramite il costruttore\footnote{Ndr: ovviamente ci sono anche costruttori con più parametri, sia per Socket, che per ServerSocket.}:
+La classe \texttt{InetAddress} ha gli oggetti che rappresentano gli indirizzi IP. Questa classe è necessaria per la creazione dei socket da parte del client tramite il costruttore\footnote{Ndr: ovviamente ci sono anche costruttori con più parametri, sia per Socket, che per ServerSocket.}:
 \begin{lstlisting}
 public Socket(InetAddress address, int port) throws IOException
 \end{lstlisting}
@@ -39,7 +39,9 @@ Un'alternativa alla comunicazione tramite socket è quella dei Datagram. Questo 
 La classe da utilizzare per ricevere o inviare i pacchetti è \texttt{DatagramSocket}. Non c'è distinzione di classe per la ricezione o l'invio. Un DatagramSocket si può connettere con il metodo \texttt{connect()} ad un indirizzo specifico, ma in questo modo i pacchetti vengono spediti o ricevuti solo verso/da quell'indirizzo. Con il metodo \texttt{send()} è possibile inviare un pacchetto rappresentato da un oggetto di \texttt{DatagramPacket}, mentre con \texttt{receive()} si riceve un pacchetto. La classe \texttt{DatagramPacket} è \texttt{final}, quindi non si può estendere. Infine il DatagramSocket va chiuso con il metodo \texttt{close()}.
 
 \section{URL}
-Esiste inoltre la possibilità di interagire direttamente con risorse web tramite la classe \texttt{final URL e URLConnection}. [...]\footnote{Ndr: non verrà approfondito.}
+Esiste inoltre la possibilità di interagire direttamente con risorse web tramite la classe \texttt{final URL e URLConnection}.
+
+Una URL ha un formato complesso ed in grado di esprimere molte cose (protocolli, porte richieste, indirizzi remoti, file, jar, ecc.). Possiamo ottenere da una URL direttamente lo stream ottenuto dalla richiesta GET, mentre se vogliamo invece effettuare una richiesta POST dobbiamo esplicitamente richiederlo ottenendo la \texttt{URLConnection} e segnalando che desideriamo usarla a scopi di output. [...]\footnote{Ndr: non verrà approfondito.}
 
 \section{Channel}
 L'interfaccia \texttt{Channel} rappresenta un canale di I/O aperto o chiuso. L'interfaccia \texttt{NetworkChannel} invece è un Channel per un socket, cioè rappresenta una comunicazione su una rete. 

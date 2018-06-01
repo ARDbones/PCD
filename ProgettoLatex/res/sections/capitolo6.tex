@@ -41,12 +41,35 @@ Quando si hanno metodi ridefiniti con \texttt{throws} nella segnatura, il metodo
 \item \texttt{ArrayIndexOutOfBoundsException}: tentativo di accedere ad un elemento oltre i limiti di un array.
 \end{itemize}
 
-\section{Try-with-resources}
-Il \texttt{try-with-resources} è stato introdotto da Java 7 e serve per semplificare il normale flusso try-catch-finally quando si usano degli stream. 
+\section{try-with-resources}
+Prima di JSE7 le gestione delle risorse ed eccezioni era gestita attraverso il meccanismo \texttt{try/catch/finally}. Richiede una disciplina d'uso di gestione eccezioni innestate che non \`e immediata con spesso codice ridondante e ripetitivo per gestire la chiusura delle risorse che non servono. Java SE7 introduce una nuova funzionalit\`a chiamata \texttt{try-with-resources}.
+ 
 \begin{lstlisting}
-try(InputStream in = new FileInputStream("Input");
-OutputStream out = new FileOutputStream("Changed-Input")){
-// codice che lavora con lo stream
+void printFileJava7() throws IOException {
+	try(FileInputStream in = new FileInputStream("f.txt")) {
+		int data = in.read();
+		while(data != -1){
+			System.out.print((char) data);
+			data = in.read();
+		}
+	}
 }
 \end{lstlisting}
-Con questa struttura le risorse vengono automaticamente chiuse quando si esce dal blocco try. L'eventuale eccezione lanciata verrà passata al chiamante.
+
+Quando il blocco try finisce (normalmente o lanciando un eccezione) le risorse saranno chiuse/rilasciate in automatico. Se un eccezione viene lanciata sia all'interno del blocco \texttt{try} che in chiusura/rilascio della risorsa, l'eccezione in chiusura verr\`a soppressa mentre quella interna al blocco lanciata al chiamante.
+
+E' possibile usare il costrutto try-with-resources con tutte le risorse che implementano l’interfaccia \texttt{java.lang.AutoClosable}. Gli I/O stream visti implementano questa interfaccia.
+
+E' inoltre possibile catturare molteplici errori in un unico blocco \texttt{catch}.
+
+\begin{lstlisting}
+try {
+	// crea connessione db ed esegui query.
+} catch(SQLException | IOException e) {
+	...
+} catch(Exception e) {
+  ...
+}
+\end{lstlisting}
+
+Attenzione: Non si possono catturare all'interno dello stesso catch eccezioni che sono in una relazione di tipo. E.g., non si possono inserire sia \texttt{ExceptionA} che \texttt{ExceptionB} se \texttt{ExceptionB} eredita sia direttamente che indirettamente da \texttt{ExceptionA}. Il compilatore si lamenta: \texttt{The exception ExceptionB is already caught by the alternative ExceptionA}
