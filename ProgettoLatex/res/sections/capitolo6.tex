@@ -56,11 +56,11 @@ void printFileJava7() throws IOException {
 }
 \end{lstlisting}
 
-Quando il blocco try finisce (normalmente o lanciando un eccezione) le risorse saranno chiuse/rilasciate in automatico. Se un eccezione viene lanciata sia all'interno del blocco \texttt{try} che in chiusura/rilascio della risorsa, l'eccezione in chiusura verr\`a soppressa mentre quella interna al blocco lanciata al chiamante.
+Quando il blocco try finisce (normalmente o lanciando un'eccezione) le risorse saranno chiuse/rilasciate in automatico. Se un'eccezione viene lanciata sia all'interno del blocco \texttt{try} che in chiusura/rilascio della risorsa, l'eccezione in chiusura verr\`a soppressa mentre quella interna al blocco lanciata al chiamante.
 
-E' possibile usare il costrutto try-with-resources con tutte le risorse che implementano l’interfaccia \texttt{java.lang.AutoClosable}. Gli I/O stream visti implementano questa interfaccia.
+\`E possibile usare il costrutto try-with-resources con tutte le risorse che implementano l’interfaccia \texttt{java.lang.AutoClosable}. Gli I/O stream visti implementano questa interfaccia.
 
-E' inoltre possibile catturare molteplici errori in un unico blocco \texttt{catch}.
+\`E inoltre possibile catturare molteplici errori in un unico blocco \texttt{catch}.
 
 \begin{lstlisting}
 try {
